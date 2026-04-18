@@ -1,0 +1,8 @@
+INFO:     Started server process [13506]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+Incident saved locally: temp_logs/incident_20260418_225154.json
+INFO:     127.0.0.1:51725 - "POST /process HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51727 - "POST /confirm-step HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51728 - "GET /status HTTP/1.1" 200 OK
