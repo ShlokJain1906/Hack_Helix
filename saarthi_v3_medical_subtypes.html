@@ -1,0 +1,680 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=DM+Sans:wght@400;500&display=swap');
+  *{box-sizing:border-box;margin:0;padding:0;}
+  :root{
+    --red:#E53935;--amber:#FF8F00;--blue:#1565C0;--green:#2E7D32;
+    --bg:#0D0D0F;--surface:#18181C;--surface2:#22222A;
+    --border:rgba(255,255,255,0.08);--text:#F5F4F0;--muted:rgba(245,244,240,0.5);
+    --fh:'Sora',sans-serif;--fb:'DM Sans',sans-serif;
+  }
+  #app{width:380px;height:720px;background:var(--bg);border-radius:40px;overflow:hidden;position:relative;font-family:var(--fb);color:var(--text);margin:0 auto;border:1px solid rgba(255,255,255,0.12);}
+  .screen{position:absolute;inset:0;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity 0.4s ease;overflow:hidden;}
+  .screen.active{opacity:1;pointer-events:all;}
+  .topbar{display:flex;align-items:center;justify-content:space-between;padding:50px 20px 12px;flex-shrink:0;}
+  .logo{font-family:var(--fh);font-size:20px;font-weight:700;letter-spacing:-0.5px;}
+  .logo span{color:var(--red);}
+  .ticon{width:36px;height:36px;border-radius:10px;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:15px;cursor:pointer;}
+  .bnav{display:flex;background:var(--surface);border-top:1px solid var(--border);padding:10px 0 24px;flex-shrink:0;}
+  .ni{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:10px;color:var(--muted);cursor:pointer;}
+  .ni.active{color:var(--red);}
+  .sc{flex:1;overflow-y:auto;padding:0 16px 12px;scrollbar-width:none;}
+  .sc::-webkit-scrollbar{display:none;}
+  .stitle{font-family:var(--fh);font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;}
+  .egrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px;}
+  .ecard{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:16px 13px;cursor:pointer;transition:transform 0.15s;display:flex;flex-direction:column;gap:9px;}
+  .ecard:active{transform:scale(0.97);}
+  .ecard.r{border-color:rgba(229,57,53,0.3);}
+  .ecard.a{border-color:rgba(255,143,0,0.3);}
+  .ecard.b{border-color:rgba(21,101,192,0.3);}
+  .ecard.g{border-color:rgba(46,125,50,0.3);}
+  .eico{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:21px;}
+  .eico.r{background:rgba(229,57,53,0.15);}
+  .eico.a{background:rgba(255,143,0,0.15);}
+  .eico.b{background:rgba(21,101,192,0.15);}
+  .eico.g{background:rgba(46,125,50,0.15);}
+  .elabel{font-family:var(--fh);font-size:13px;font-weight:600;}
+  .esub{font-size:10px;color:var(--muted);margin-top:1px;}
+  .iarea{display:flex;align-items:center;gap:8px;padding:10px 16px;background:var(--surface);border-top:1px solid var(--border);flex-shrink:0;}
+  .minput{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:10px 13px;color:var(--text);font-size:14px;font-family:var(--fb);outline:none;}
+  .minput::placeholder{color:var(--muted);}
+  .ibtn{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;cursor:pointer;border:none;flex-shrink:0;}
+  .sbtn{background:var(--red);color:white;font-size:15px;}
+  .mbtn{background:var(--surface2);border:1px solid var(--border);font-size:15px;}
+  .abub{background:var(--surface);border:1px solid var(--border);border-radius:16px;border-bottom-left-radius:4px;padding:11px 13px;font-size:13px;line-height:1.55;animation:sli 0.3s ease forwards;opacity:0;}
+  .abub.urg{border-color:rgba(229,57,53,0.45);background:rgba(229,57,53,0.09);}
+  .abub.wrn{border-color:rgba(255,143,0,0.45);background:rgba(255,143,0,0.09);}
+  .abub.inf{border-color:rgba(21,101,192,0.45);background:rgba(21,101,192,0.09);}
+  .abub.suc{border-color:rgba(46,125,50,0.45);background:rgba(46,125,50,0.09);}
+  .albl{font-size:10px;color:var(--muted);margin-bottom:3px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;}
+  @keyframes sli{from{opacity:0;transform:translateY(7px);}to{opacity:1;transform:translateY(0);}}
+  .ubub{background:var(--red);border-radius:16px;border-bottom-right-radius:4px;padding:10px 13px;font-size:13px;align-self:flex-end;max-width:78%;animation:sli 0.3s ease forwards;opacity:0;}
+  .carea{display:flex;flex-direction:column;gap:8px;padding:6px 0;}
+  .sbanner{background:rgba(183,28,28,0.85);border-radius:13px;padding:11px 15px;display:flex;align-items:center;gap:10px;margin:6px 0;animation:pb 1.5s infinite;}
+  @keyframes pb{0%,100%{box-shadow:0 0 0 0 rgba(229,57,53,0.4);}50%{box-shadow:0 0 0 6px rgba(229,57,53,0);}}
+  .sbtxt{font-family:var(--fh);font-size:13px;font-weight:600;}
+  .sbsub{font-size:11px;opacity:0.85;}
+  #sp{background:#0A0608;}
+  .ptbar{padding:50px 20px 10px;display:flex;align-items:center;gap:10px;}
+  .pbadge{background:rgba(229,57,53,0.2);border:1px solid rgba(229,57,53,0.4);border-radius:7px;padding:3px 9px;font-size:10px;color:#FF5252;font-weight:600;letter-spacing:0.5px;}
+  .sosw{flex:1;display:flex;align-items:center;justify-content:center;flex-direction:column;}
+  .sosr{position:relative;display:flex;align-items:center;justify-content:center;}
+  .sosr::before,.sosr::after{content:'';position:absolute;border-radius:50%;border:1.5px solid rgba(229,57,53,0.3);animation:rp 2s ease-out infinite;}
+  .sosr::before{width:175px;height:175px;animation-delay:0s;}
+  .sosr::after{width:215px;height:215px;animation-delay:0.5s;}
+  @keyframes rp{0%{transform:scale(0.85);opacity:0.7;}100%{transform:scale(1.1);opacity:0;}}
+  .sosb{width:136px;height:136px;border-radius:50%;background:#B71C1C;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;border:none;color:white;font-family:var(--fh);font-size:28px;font-weight:700;letter-spacing:2px;z-index:2;position:relative;transition:transform 0.1s;}
+  .sosb:active{transform:scale(0.96);}
+  .soss{font-size:10px;letter-spacing:0.5px;opacity:0.8;font-weight:400;margin-top:2px;}
+  .pacts{display:flex;flex-direction:column;gap:9px;padding:14px 16px 8px;flex-shrink:0;}
+  .pabt{display:flex;align-items:center;gap:13px;background:var(--surface);border:1px solid var(--border);border-radius:15px;padding:14px 17px;cursor:pointer;color:var(--text);font-family:var(--fb);font-size:14px;font-weight:500;transition:background 0.15s;}
+  .pabt:active{background:var(--surface2);}
+  .pico{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:19px;}
+  #sv{background:#080A10;}
+  .vc{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+  .wc{position:relative;display:flex;align-items:center;justify-content:center;width:190px;height:190px;margin-bottom:18px;}
+  .wv{position:absolute;border-radius:50%;border:1.5px solid rgba(21,101,192,0.4);animation:wa 2s ease-out infinite;}
+  .wv:nth-child(1){width:96px;height:96px;animation-delay:0s;}
+  .wv:nth-child(2){width:134px;height:134px;animation-delay:0.4s;}
+  .wv:nth-child(3){width:174px;height:174px;animation-delay:0.8s;}
+  @keyframes wa{0%{transform:scale(0.8);opacity:0.8;}100%{transform:scale(1.2);opacity:0;}}
+  .mbig{width:76px;height:76px;border-radius:50%;background:var(--blue);z-index:2;display:flex;align-items:center;justify-content:center;font-size:32px;cursor:pointer;}
+  .vinst{background:var(--surface);border:1px solid rgba(21,101,192,0.3);border-radius:15px;padding:15px 18px;font-size:14px;text-align:center;margin:0 16px;animation:fdi 0.5s ease;}
+  @keyframes fdi{from{opacity:0;}to{opacity:1;}}
+  .sgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .scard{background:var(--surface);border:1px solid var(--border);border-radius:19px;padding:18px 12px;display:flex;flex-direction:column;align-items:center;gap:9px;cursor:pointer;transition:transform 0.15s;}
+  .scard:active{transform:scale(0.97);}
+  .sbico{width:52px;height:52px;border-radius:15px;display:flex;align-items:center;justify-content:center;font-size:27px;}
+  .sblbl{font-family:var(--fh);font-size:14px;font-weight:700;text-align:center;}
+  .tl{padding:6px 0;}
+  .tli{display:flex;gap:13px;padding:0 0 20px;position:relative;}
+  .tli:not(:last-child)::after{content:'';position:absolute;left:16px;top:30px;bottom:0;width:1px;background:var(--border);}
+  .tld{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
+  .tlt{font-size:10px;color:var(--muted);margin-bottom:2px;font-weight:600;letter-spacing:0.5px;}
+  .tll{font-size:13px;font-weight:500;}
+  .sbar{position:absolute;top:0;left:0;right:0;height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 22px;font-size:12px;font-weight:600;z-index:10;color:var(--text);}
+  #to{position:absolute;inset:0;background:#0A0608;opacity:0;pointer-events:none;z-index:100;transition:opacity 0.35s ease;border-radius:40px;}
+  .tdots{display:flex;gap:4px;padding:3px 0;}
+  .tdots span{width:6px;height:6px;border-radius:50%;background:var(--muted);animation:dt 1.2s infinite;}
+  .tdots span:nth-child(2){animation-delay:0.2s;}
+  .tdots span:nth-child(3){animation-delay:0.4s;}
+  @keyframes dt{0%,80%,100%{opacity:0.2;transform:scale(0.8);}40%{opacity:1;transform:scale(1);}}
+  /* Medical sub-screen */
+  #sm{background:var(--bg);}
+  .msubtitle{font-family:var(--fh);font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:1px;padding:0 16px 10px;}
+  .sublist{display:flex;flex-direction:column;gap:9px;padding:0 16px;}
+  .subcard{display:flex;align-items:center;gap:14px;background:var(--surface);border:1px solid var(--border);border-radius:15px;padding:15px 16px;cursor:pointer;transition:transform 0.12s;}
+  .subcard:active{transform:scale(0.98);}
+  .subcard.r{border-color:rgba(229,57,53,0.3);}
+  .subcard.a{border-color:rgba(255,143,0,0.3);}
+  .subcard.b{border-color:rgba(21,101,192,0.3);}
+  .subcard.g{border-color:rgba(46,125,50,0.3);}
+  .subico{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+  .sublabel{font-family:var(--fh);font-size:14px;font-weight:600;}
+  .subdesc{font-size:11px;color:var(--muted);margin-top:2px;}
+  .subarrow{margin-left:auto;color:var(--muted);font-size:16px;}
+  .qstrip{display:flex;gap:7px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none;}
+  .qstrip::-webkit-scrollbar{display:none;}
+  .qchip{background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:7px 11px;font-size:11px;white-space:nowrap;cursor:pointer;flex-shrink:0;}
+</style>
+
+<h2 class="sr-only">Saarthi Emergency App v3 — 4 main tabs: Accident, Medical (with sub-types), Fire, Crime. Each has unique AI response cards, voice steps, and action cards.</h2>
+
+<div id="app">
+  <div id="to"></div>
+  <div class="sbar"><span>9:41</span><span>● ●● ▮</span></div>
+
+  <!-- HOME -->
+  <div class="screen active" id="sh">
+    <div class="topbar"><div class="logo">Saar<span>thi</span></div><div class="ticon">🔔</div></div>
+    <div style="padding:2px 16px 13px;">
+      <div style="font-family:var(--fh);font-size:21px;font-weight:700;line-height:1.25;">Stay safe,<br>we're here.</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:4px;">Tap an emergency or describe it below</div>
+    </div>
+    <div class="sc">
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:15px;padding:13px 15px;display:flex;align-items:center;gap:9px;color:var(--muted);font-size:13px;cursor:pointer;margin-bottom:18px;" onclick="goToChat('custom')">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        Describe your emergency...
+      </div>
+      <div class="stitle">Emergency type</div>
+      <div class="egrid">
+        <div class="ecard r" onclick="goToChat('accident')">
+          <div class="eico r">🚗</div>
+          <div><div class="elabel">Accident</div><div class="esub">Crash · Fall · Injury</div></div>
+        </div>
+        <div class="ecard b" onclick="showMedical()">
+          <div class="eico b">🏥</div>
+          <div><div class="elabel">Medical</div><div class="esub">Heart · Breathing · More</div></div>
+        </div>
+        <div class="ecard a" onclick="goToChat('fire')">
+          <div class="eico a">🔥</div>
+          <div><div class="elabel">Fire</div><div class="esub">House · Smoke · Burns</div></div>
+        </div>
+        <div class="ecard g" onclick="goToChat('crime')">
+          <div class="eico g">🚨</div>
+          <div><div class="elabel">Crime / Threat</div><div class="esub">Theft · Assault · Unsafe</div></div>
+        </div>
+      </div>
+      <div class="stitle">Quick prompts</div>
+      <div class="qstrip">
+        <div class="qchip" onclick="goToChat('heart')">Heart attack</div>
+        <div class="qchip" onclick="goToChat('accident')">Road crash</div>
+        <div class="qchip" onclick="goToChat('fire')">Fire nearby</div>
+        <div class="qchip" onclick="goToChat('bleeding')">Heavy bleeding</div>
+        <div class="qchip" onclick="goToChat('unconscious')">Unconscious person</div>
+        <div class="qchip" onclick="goToChat('breathing')">Can't breathe</div>
+      </div>
+    </div>
+    <div class="bnav">
+      <div class="ni active"><div style="font-size:16px;">🏠</div><span>Home</span></div>
+      <div class="ni" onclick="goToChat('custom')"><div style="font-size:16px;">🚨</div><span>Emergency</span></div>
+      <div class="ni"><div style="font-size:16px;">👤</div><span>Profile</span></div>
+    </div>
+  </div>
+
+  <!-- MEDICAL SUB-SCREEN -->
+  <div class="screen" id="sm">
+    <div class="topbar">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div class="ticon" onclick="showScreen('sh')" style="font-size:13px;">←</div>
+        <div style="font-family:var(--fh);font-size:15px;font-weight:600;">Medical Emergency</div>
+      </div>
+      <div style="width:36px;"></div>
+    </div>
+    <div class="msubtitle">Choose the situation</div>
+    <div class="sublist">
+      <div class="subcard r" onclick="goToChat('heart')">
+        <div class="subico r" style="background:rgba(229,57,53,0.15);">❤️</div>
+        <div><div class="sublabel">Heart Attack</div><div class="subdesc">Chest pain, arm pain, sweating</div></div>
+        <div class="subarrow">›</div>
+      </div>
+      <div class="subcard a" onclick="goToChat('breathing')">
+        <div class="subico a" style="background:rgba(255,143,0,0.15);">😮‍💨</div>
+        <div><div class="sublabel">Breathing Issue</div><div class="subdesc">Choking, asthma, can't breathe</div></div>
+        <div class="subarrow">›</div>
+      </div>
+      <div class="subcard r" onclick="goToChat('bleeding')">
+        <div class="subico r" style="background:rgba(183,28,28,0.15);">🩸</div>
+        <div><div class="sublabel">Severe Bleeding</div><div class="subdesc">Deep cut, wound, blood loss</div></div>
+        <div class="subarrow">›</div>
+      </div>
+      <div class="subcard b" onclick="goToChat('unconscious')">
+        <div class="subico b" style="background:rgba(21,101,192,0.15);">🫥</div>
+        <div><div class="sublabel">Unconscious Person</div><div class="subdesc">Collapsed, unresponsive, fainted</div></div>
+        <div class="subarrow">›</div>
+      </div>
+    </div>
+    <div class="bnav" style="margin-top:auto;">
+      <div class="ni" onclick="showScreen('sh')"><div style="font-size:16px;">🏠</div><span>Home</span></div>
+      <div class="ni active"><div style="font-size:16px;">🏥</div><span>Medical</span></div>
+      <div class="ni"><div style="font-size:16px;">👤</div><span>Profile</span></div>
+    </div>
+  </div>
+
+  <!-- CHAT -->
+  <div class="screen" id="sc">
+    <div class="topbar">
+      <div style="display:flex;align-items:center;gap:9px;">
+        <div class="ticon" id="back-btn" onclick="showScreen('sh')" style="font-size:13px;">←</div>
+        <div id="ch-icon" style="width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:17px;background:rgba(229,57,53,0.15);">🚨</div>
+        <div>
+          <div id="ch-title" style="font-family:var(--fh);font-size:13px;font-weight:600;">Emergency</div>
+          <div style="font-size:10px;color:var(--muted);">AI responding</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:5px;">
+        <div style="width:7px;height:7px;border-radius:50%;background:#4CAF50;"></div>
+        <span style="font-size:11px;color:var(--muted);">Live</span>
+      </div>
+    </div>
+    <div class="sc" id="cscroll"><div class="carea" id="cmsgs"></div></div>
+    <div id="scon" style="padding:0 16px;"></div>
+    <div class="iarea">
+      <input class="minput" id="minput" placeholder="Describe what happened..." />
+      <div class="ibtn mbtn">🎤</div>
+      <div class="ibtn sbtn" onclick="sendMsg()">↑</div>
+    </div>
+  </div>
+
+  <!-- PANIC -->
+  <div class="screen" id="sp">
+    <div class="ptbar">
+      <div class="logo">Saar<span>thi</span></div>
+      <div class="pbadge" id="pbadge">ASSIST MODE</div>
+    </div>
+    <div class="sosw">
+      <div class="sosr">
+        <button class="sosb" onclick="trigSOS()">SOS<span class="soss">Hold to send</span></button>
+      </div>
+      <div style="margin-top:18px;font-size:12px;color:var(--muted);text-align:center;line-height:1.7;">
+        Simplified mode active<br>
+        <span id="pscenlbl" style="color:var(--red);font-size:11px;">● High stress detected</span>
+      </div>
+    </div>
+    <div class="pacts">
+      <button class="pabt" onclick="trigSOS()"><div class="pico" style="background:rgba(229,57,53,0.15);">🚑</div><span id="pcalllbl">Call Ambulance</span></button>
+      <button class="pabt" onclick="showScreen('stl')"><div class="pico" style="background:rgba(21,101,192,0.15);">📍</div><span>Share Location</span></button>
+      <button class="pabt" onclick="showScreen('sv')"><div class="pico" style="background:rgba(46,125,50,0.15);">🎙️</div><span>Start Voice Guidance</span></button>
+    </div>
+    <div class="bnav">
+      <div class="ni" onclick="showScreen('sh')"><div style="font-size:16px;">🏠</div></div>
+      <div class="ni active"><div style="font-size:16px;">🚨</div></div>
+      <div class="ni"><div style="font-size:16px;">👤</div></div>
+    </div>
+  </div>
+
+  <!-- VOICE -->
+  <div class="screen" id="sv">
+    <div class="topbar">
+      <div class="ticon" onclick="showScreen('sp')" style="font-size:13px;">←</div>
+      <div class="logo">Saar<span>thi</span></div>
+      <div style="width:36px;"></div>
+    </div>
+    <div class="vc">
+      <div class="wc">
+        <div class="wv"></div><div class="wv"></div><div class="wv"></div>
+        <div class="mbig" onclick="nxtVoice()">🎙️</div>
+      </div>
+      <div style="font-family:var(--fh);font-size:17px;font-weight:600;text-align:center;margin-bottom:6px;">Tell me what happened</div>
+      <div style="font-size:12px;color:var(--muted);text-align:center;margin-bottom:26px;">Tap mic to cycle guidance</div>
+    </div>
+    <div class="vinst" id="vinst">Stay calm. I'm listening.</div>
+    <div style="padding:14px 16px 8px;">
+      <button class="pabt" onclick="showScreen('ssc')" style="justify-content:center;font-size:13px;">See step-by-step actions →</button>
+    </div>
+    <div class="bnav">
+      <div class="ni" onclick="showScreen('sh')"><div style="font-size:16px;">🏠</div></div>
+      <div class="ni active"><div style="font-size:16px;">🎙️</div></div>
+      <div class="ni"><div style="font-size:16px;">👤</div></div>
+    </div>
+  </div>
+
+  <!-- SIMPLE CARDS -->
+  <div class="screen" id="ssc">
+    <div class="topbar">
+      <div class="ticon" onclick="showScreen('sv')" style="font-size:13px;">←</div>
+      <div class="logo" style="font-size:15px;">Saar<span>thi</span></div>
+      <div class="ticon" onclick="showScreen('stl')">⏱</div>
+    </div>
+    <div style="padding:0 16px 10px;">
+      <div style="font-family:var(--fh);font-size:17px;font-weight:700;margin-bottom:3px;" id="ctitle">Take Action Now</div>
+      <div style="font-size:11px;color:var(--muted);" id="csub">Follow these steps</div>
+    </div>
+    <div class="sc"><div class="sgrid" id="scgrid"></div></div>
+    <div class="bnav">
+      <div class="ni" onclick="showScreen('sh')"><div style="font-size:16px;">🏠</div></div>
+      <div class="ni active"><div style="font-size:16px;">🚨</div></div>
+      <div class="ni"><div style="font-size:16px;">👤</div></div>
+    </div>
+  </div>
+
+  <!-- SOS -->
+  <div class="screen" id="ssos">
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:22px;gap:15px;text-align:center;">
+      <div style="font-size:58px;">🚨</div>
+      <div style="font-family:var(--fh);font-size:23px;font-weight:700;">SOS Sent</div>
+      <div style="font-size:13px;color:var(--muted);line-height:1.8;">Emergency services notified.<br>Your location has been shared.<br>Help is on the way.</div>
+      <div style="background:rgba(46,125,50,0.1);border:1px solid rgba(46,125,50,0.3);border-radius:13px;padding:13px 20px;width:100%;">
+        <div style="font-size:11px;color:#66BB6A;font-weight:600;letter-spacing:0.5px;text-transform:uppercase;">ETA</div>
+        <div style="font-size:25px;font-weight:700;font-family:var(--fh);margin-top:2px;">~4 min</div>
+      </div>
+      <button class="pabt" onclick="showScreen('stl')" style="width:100%;justify-content:center;">View Timeline →</button>
+    </div>
+  </div>
+
+  <!-- TIMELINE -->
+  <div class="screen" id="stl">
+    <div class="topbar">
+      <div class="ticon" onclick="showScreen('sh')" style="font-size:13px;">←</div>
+      <div style="font-family:var(--fh);font-size:15px;font-weight:600;">Incident Timeline</div>
+      <div style="width:36px;"></div>
+    </div>
+    <div class="sc">
+      <div style="font-size:12px;color:var(--muted);margin-bottom:14px;">April 18 — Active emergency</div>
+      <div class="tl">
+        <div class="tli"><div class="tld" style="background:rgba(229,57,53,0.15);">🚨</div><div><div class="tlt">8:41 PM</div><div class="tll">Emergency reported</div><div style="font-size:11px;color:var(--muted);margin-top:1px;" id="tldesc">Emergency detected</div></div></div>
+        <div class="tli"><div class="tld" style="background:rgba(255,143,0,0.15);">⚡</div><div><div class="tlt">8:42 PM</div><div class="tll">Stress detected</div><div style="font-size:11px;color:var(--muted);margin-top:1px;">Switching to Assist Mode</div></div></div>
+        <div class="tli"><div class="tld" style="background:rgba(229,57,53,0.15);">📡</div><div><div class="tlt">8:43 PM</div><div class="tll">SOS sent</div><div style="font-size:11px;color:var(--muted);margin-top:1px;">Location shared — services dispatched</div></div></div>
+        <div class="tli"><div class="tld" style="background:rgba(21,101,192,0.15);">🎙️</div><div><div class="tlt">8:44 PM</div><div class="tll" id="tlguid">Voice guidance started</div><div style="font-size:11px;color:var(--muted);margin-top:1px;">Step-by-step instructions active</div></div></div>
+        <div class="tli"><div class="tld" style="background:rgba(46,125,50,0.15);">✅</div><div><div class="tlt">8:47 PM</div><div class="tll" style="color:#66BB6A;">Help arrived</div><div style="font-size:11px;color:var(--muted);margin-top:1px;">Emergency resolved — 6 min response</div></div></div>
+      </div>
+      <button class="pabt" onclick="showScreen('sh')" style="width:100%;justify-content:center;margin-top:6px;">Return to Home</button>
+    </div>
+  </div>
+</div>
+
+<div style="display:flex;gap:7px;justify-content:center;margin-top:14px;flex-wrap:wrap;max-width:380px;margin-left:auto;margin-right:auto;">
+  <button onclick="showScreen('sh')" style="background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:7px;padding:5px 11px;font-size:11px;cursor:pointer;color:var(--color-text-primary);">🏠 Home</button>
+  <button onclick="showMedical()" style="background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:7px;padding:5px 11px;font-size:11px;cursor:pointer;color:var(--color-text-primary);">🏥 Medical</button>
+  <button onclick="goToChat('heart')" style="background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:7px;padding:5px 11px;font-size:11px;cursor:pointer;color:var(--color-text-primary);">❤️ Heart</button>
+  <button onclick="goToChat('breathing')" style="background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:7px;padding:5px 11px;font-size:11px;cursor:pointer;color:var(--color-text-primary);">😮‍💨 Breathing</button>
+  <button onclick="goToChat('bleeding')" style="background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:7px;padding:5px 11px;font-size:11px;cursor:pointer;color:var(--color-text-primary);">🩸 Bleeding</button>
+  <button onclick="goToChat('unconscious')" style="background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:7px;padding:5px 11px;font-size:11px;cursor:pointer;color:var(--color-text-primary);">🫥 Unconscious</button>
+  <button onclick="goToChat('accident')" style="background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:7px;padding:5px 11px;font-size:11px;cursor:pointer;color:var(--color-text-primary);">🚗 Accident</button>
+  <button onclick="goToChat('fire')" style="background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:7px;padding:5px 11px;font-size:11px;cursor:pointer;color:var(--color-text-primary);">🔥 Fire</button>
+  <button onclick="goToChat('crime')" style="background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:7px;padding:5px 11px;font-size:11px;cursor:pointer;color:var(--color-text-primary);">🚨 Crime</button>
+</div>
+
+<script>
+  let curType = 'heart', vstp = 0;
+
+  const D = {
+    heart:{
+      icon:'❤️',title:'Heart Attack',clr:'rgba(21,101,192,0.15)',call:'Call Ambulance',
+      plbl:'● Cardiac emergency detected',
+      msg:'My father is having a heart attack',
+      res:[
+        {t:'🫀 Possible cardiac arrest — acting immediately',c:'urg'},
+        {t:'📞 Calling 112 — ambulance dispatched',c:'urg'},
+        {t:'💊 Chew an aspirin if available and conscious',c:'wrn'},
+        {t:'🛌 Lay him flat, loosen shirt around chest',c:'wrn'},
+        {t:'💪 Begin CPR — 30 hard compressions, then 2 breaths',c:'wrn'},
+      ],
+      tld:'Cardiac event — person collapsed',tlg:'CPR guidance started',
+      ctitle:'Cardiac Protocol',csub:'Heart attack response',
+      cards:[
+        {i:'💪',l:'Start CPR',bc:'rgba(229,57,53,0.3)',bg:'rgba(229,57,53,0.15)'},
+        {i:'🛌',l:'Lay Flat',bc:'rgba(255,143,0,0.3)',bg:'rgba(255,143,0,0.15)'},
+        {i:'💊',l:'Give Aspirin',bc:'rgba(21,101,192,0.3)',bg:'rgba(21,101,192,0.15)'},
+        {i:'😮‍💨',l:'Stay Calm',bc:'rgba(46,125,50,0.3)',bg:'rgba(46,125,50,0.15)'},
+      ],
+      vs:['Stay calm. Help is on the way.','Lay him flat on a firm surface.','Tilt head back, check for breathing.','Place both hands on center of chest.','Push hard 30 times, then 2 breaths.','Keep going — ambulance is 4 minutes away.']
+    },
+    breathing:{
+      icon:'😮‍💨',title:'Breathing Issue',clr:'rgba(255,143,0,0.15)',call:'Call Ambulance',
+      plbl:'● Breathing emergency detected',
+      msg:'My mother is choking and cannot breathe',
+      res:[
+        {t:'😮‍💨 Breathing emergency — responding now',c:'urg'},
+        {t:'📞 Call 112 immediately',c:'urg'},
+        {t:'🤲 If choking: stand behind, give 5 firm back blows between shoulder blades',c:'wrn'},
+        {t:'👊 If back blows fail: give 5 abdominal thrusts (Heimlich maneuver)',c:'wrn'},
+        {t:'🫁 If unconscious and not breathing: begin rescue breaths',c:'wrn'},
+      ],
+      tld:'Breathing emergency — choking reported',tlg:'Breathing guidance started',
+      ctitle:'Breathing Protocol',csub:'Choking / airway emergency',
+      cards:[
+        {i:'🤲',l:'Back Blows',bc:'rgba(255,143,0,0.3)',bg:'rgba(255,143,0,0.15)'},
+        {i:'👊',l:'Heimlich',bc:'rgba(229,57,53,0.3)',bg:'rgba(229,57,53,0.15)'},
+        {i:'🫁',l:'Rescue Breaths',bc:'rgba(21,101,192,0.3)',bg:'rgba(21,101,192,0.15)'},
+        {i:'😮‍💨',l:'Stay Calm',bc:'rgba(46,125,50,0.3)',bg:'rgba(46,125,50,0.15)'},
+      ],
+      vs:['Is the person conscious? Can they speak?','If choking: lean them forward slightly.','Give 5 firm blows between shoulder blades.','If no change: wrap arms around their waist.','Thrust upward firmly just below the ribs.','If they collapse: begin CPR and rescue breaths.']
+    },
+    bleeding:{
+      icon:'🩸',title:'Severe Bleeding',clr:'rgba(183,28,28,0.15)',call:'Call Ambulance',
+      plbl:'● Severe bleeding detected',
+      msg:'My brother has a deep cut and is bleeding heavily',
+      res:[
+        {t:'🩸 Severe bleeding detected — act immediately',c:'urg'},
+        {t:'📞 Call 112 — request ambulance',c:'urg'},
+        {t:'🤲 Apply firm, continuous pressure to the wound — do NOT release',c:'wrn'},
+        {t:'🧣 Use a cloth, shirt or bandage — elevate the limb above heart level',c:'wrn'},
+        {t:'🚫 Do NOT remove the cloth if it soaks through — add more on top',c:'urg'},
+      ],
+      tld:'Severe bleeding — deep wound reported',tlg:'Bleeding control guidance started',
+      ctitle:'Bleeding Protocol',csub:'Wound / haemorrhage control',
+      cards:[
+        {i:'🤲',l:'Apply Pressure',bc:'rgba(229,57,53,0.3)',bg:'rgba(229,57,53,0.15)'},
+        {i:'⬆️',l:'Elevate Limb',bc:'rgba(255,143,0,0.3)',bg:'rgba(255,143,0,0.15)'},
+        {i:'🧣',l:'Bandage Tight',bc:'rgba(21,101,192,0.3)',bg:'rgba(21,101,192,0.15)'},
+        {i:'🚫',l:'Don\'t Release',bc:'rgba(183,28,28,0.3)',bg:'rgba(183,28,28,0.15)'},
+      ],
+      vs:['Press hard on the wound right now.','Use any cloth or clothing you have.','Keep pressing — do not let go.','Raise the injured limb above their heart.','If it soaks through, add more cloth on top.','Ambulance is coming — keep the pressure on.']
+    },
+    unconscious:{
+      icon:'🫥',title:'Unconscious Person',clr:'rgba(21,101,192,0.15)',call:'Call Ambulance',
+      plbl:'● Unresponsive person detected',
+      msg:'My father collapsed and is not responding to me',
+      res:[
+        {t:'🫥 Unresponsive person — checking vitals protocol',c:'urg'},
+        {t:'📞 Call 112 immediately',c:'urg'},
+        {t:'👂 Shout their name, tap shoulders — check response',c:'wrn'},
+        {t:'🫁 Tilt head back, lift chin, look for chest movement',c:'wrn'},
+        {t:'💪 No breathing detected — start CPR: 30 compressions, 2 breaths',c:'urg'},
+        {t:'🔄 If breathing: place in recovery position on their side',c:'inf'},
+      ],
+      tld:'Unconscious person — unresponsive',tlg:'Resuscitation guidance started',
+      ctitle:'Unconscious Protocol',csub:'Unresponsive / collapsed person',
+      cards:[
+        {i:'👂',l:'Check Response',bc:'rgba(255,143,0,0.3)',bg:'rgba(255,143,0,0.15)'},
+        {i:'🫁',l:'Check Breathing',bc:'rgba(21,101,192,0.3)',bg:'rgba(21,101,192,0.15)'},
+        {i:'💪',l:'Start CPR',bc:'rgba(229,57,53,0.3)',bg:'rgba(229,57,53,0.15)'},
+        {i:'🔄',l:'Recovery Position',bc:'rgba(46,125,50,0.3)',bg:'rgba(46,125,50,0.15)'},
+      ],
+      vs:['Tap shoulders and shout their name.','No response — check for breathing.','Tilt head back and lift the chin.','No breathing: place hands on chest center.','30 hard compressions, then 2 breaths.','If breathing returns: roll to recovery position.']
+    },
+    accident:{
+      icon:'🚗',title:'Road Accident',clr:'rgba(229,57,53,0.15)',call:'Call Ambulance + Police',
+      plbl:'● Road accident detected',
+      msg:'My father was in a road accident and is injured',
+      res:[
+        {t:'🚗 Road accident detected',c:'urg'},
+        {t:'📞 Call 112 (ambulance) and 100 (police)',c:'urg'},
+        {t:'🚫 Do NOT move the injured person — risk of spinal injury',c:'wrn'},
+        {t:'🩸 Apply firm pressure on any bleeding wounds',c:'wrn'},
+        {t:'⚠️ Turn on vehicle hazard lights to warn other drivers',c:'inf'},
+        {t:'🧥 Keep injured person warm using a jacket',c:'inf'},
+      ],
+      tld:'Road accident — injury reported',tlg:'First-aid guidance started',
+      ctitle:'Accident Protocol',csub:'Road crash response',
+      cards:[
+        {i:'🛑',l:'Don\'t Move',bc:'rgba(229,57,53,0.3)',bg:'rgba(229,57,53,0.15)'},
+        {i:'🩸',l:'Stop Bleeding',bc:'rgba(183,28,28,0.3)',bg:'rgba(183,28,28,0.15)'},
+        {i:'⚠️',l:'Warn Traffic',bc:'rgba(255,193,7,0.3)',bg:'rgba(255,193,7,0.15)'},
+        {i:'😮‍💨',l:'Stay Calm',bc:'rgba(21,101,192,0.3)',bg:'rgba(21,101,192,0.15)'},
+      ],
+      vs:['Is the person conscious? Call out to them.','Do not move them — risk of spine injury.','Apply pressure to any bleeding wound now.','Turn on vehicle hazard lights.','Keep them warm and still until help arrives.','Ambulance and police are on the way.']
+    },
+    fire:{
+      icon:'🔥',title:'Fire Emergency',clr:'rgba(255,143,0,0.15)',call:'Call Fire Brigade',
+      plbl:'● Fire emergency detected',
+      msg:'There is a fire in our building and someone is trapped',
+      res:[
+        {t:'🔥 Fire emergency — life at immediate risk',c:'urg'},
+        {t:'📞 Call 101 (fire brigade) and 112 now',c:'urg'},
+        {t:'🚪 Evacuate immediately — use stairs only, never the lift',c:'wrn'},
+        {t:'⬇️ Stay low and crawl — air is cleaner near the floor',c:'wrn'},
+        {t:'🖐️ Feel doors before opening — hot door means fire behind it',c:'wrn'},
+        {t:'🚫 Once outside: do NOT re-enter the building',c:'urg'},
+      ],
+      tld:'Fire reported — person trapped',tlg:'Evacuation guidance started',
+      ctitle:'Fire Protocol',csub:'Building fire response',
+      cards:[
+        {i:'🚪',l:'Evacuate Now',bc:'rgba(255,143,0,0.3)',bg:'rgba(255,143,0,0.15)'},
+        {i:'⬇️',l:'Stay Low',bc:'rgba(229,57,53,0.3)',bg:'rgba(229,57,53,0.15)'},
+        {i:'🚫',l:'No Elevator',bc:'rgba(183,28,28,0.3)',bg:'rgba(183,28,28,0.15)'},
+        {i:'😮‍💨',l:'Cover Mouth',bc:'rgba(21,101,192,0.3)',bg:'rgba(21,101,192,0.15)'},
+      ],
+      vs:['Get out now. Leave everything behind.','Feel the door — hot door means danger.','Stay low and crawl under the smoke.','Use only the stairs — never the lift.','Once outside move far from the building.','Do not go back in. Fire brigade is coming.']
+    },
+    crime:{
+      icon:'🚨',title:'Crime / Threat',clr:'rgba(46,125,50,0.15)',call:'Call Police',
+      plbl:'● Threat situation detected',
+      msg:'My father is being attacked and robbed',
+      res:[
+        {t:'🚨 Threat situation — taking immediate action',c:'urg'},
+        {t:'📞 Call 100 (police) — stay on the line',c:'urg'},
+        {t:'🏃 If safe: move away quickly from the threat',c:'wrn'},
+        {t:'📍 Note your exact location — street name, landmark',c:'inf'},
+        {t:'🔇 If hiding: silence your phone and stay completely still',c:'suc'},
+        {t:'🚫 Do NOT confront or challenge the attacker',c:'wrn'},
+      ],
+      tld:'Crime / threat — active situation',tlg:'Safety guidance started',
+      ctitle:'Safety Protocol',csub:'Crime / threat response',
+      cards:[
+        {i:'🏃',l:'Move Away',bc:'rgba(229,57,53,0.3)',bg:'rgba(229,57,53,0.15)'},
+        {i:'📍',l:'Note Location',bc:'rgba(21,101,192,0.3)',bg:'rgba(21,101,192,0.15)'},
+        {i:'🔇',l:'Stay Silent',bc:'rgba(255,143,0,0.3)',bg:'rgba(255,143,0,0.15)'},
+        {i:'😮‍💨',l:'Stay Calm',bc:'rgba(46,125,50,0.3)',bg:'rgba(46,125,50,0.15)'},
+      ],
+      vs:['Are you in immediate danger right now?','Move to a safe location if possible.','Lock or barricade a door if you are hiding.','Note any landmarks — police need your position.','Do not challenge the attacker.','Police are on the way. Stay hidden and quiet.']
+    },
+    custom:{
+      icon:'🚨',title:'Emergency',clr:'rgba(229,57,53,0.15)',call:'Call Emergency Services',
+      plbl:'● Emergency detected',
+      msg:'',
+      res:[{t:'I\'m here. Describe what happened and I\'ll guide you.',c:''}],
+      tld:'Emergency reported',tlg:'Guidance started',
+      ctitle:'Take Action',csub:'Emergency protocol',
+      cards:[
+        {i:'😮‍💨',l:'Stay Calm',bc:'rgba(21,101,192,0.3)',bg:'rgba(21,101,192,0.15)'},
+        {i:'📞',l:'Call 112',bc:'rgba(229,57,53,0.3)',bg:'rgba(229,57,53,0.15)'},
+        {i:'📍',l:'Share Location',bc:'rgba(255,143,0,0.3)',bg:'rgba(255,143,0,0.15)'},
+        {i:'🙋',l:'Get Help',bc:'rgba(46,125,50,0.3)',bg:'rgba(46,125,50,0.15)'},
+      ],
+      vs:['Stay calm. Tell me exactly what happened.','Is anyone injured? Check now.','Move to a safe location if possible.','Help is being contacted. Stay on the line.','I will guide you through every step.','You are not alone. Keep talking to me.']
+    }
+  };
+
+  function showScreen(id){
+    const ov=document.getElementById('to');
+    ov.style.opacity='1';ov.style.pointerEvents='all';
+    setTimeout(()=>{
+      document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+      const t=document.getElementById(id);
+      if(t)t.classList.add('active');
+      ov.style.opacity='0';ov.style.pointerEvents='none';
+    },340);
+  }
+
+  function showMedical(){showScreen('sm');}
+
+  function goToChat(type){
+    curType=type||'custom';
+    vstp=0;
+    const s=D[curType];
+    document.getElementById('ch-icon').textContent=s.icon;
+    document.getElementById('ch-icon').style.background=s.clr;
+    document.getElementById('ch-title').textContent=s.title;
+    document.getElementById('scon').innerHTML='';
+    document.getElementById('minput').value='';
+    const msgs=document.getElementById('cmsgs');
+    msgs.innerHTML='';
+    updatePanic();updateCards();updateTL();
+    setTimeout(()=>addAI('What\'s the emergency? I\'m here to help immediately.',''),120);
+    if(s.msg){
+      setTimeout(()=>{
+        addUser(s.msg);
+        addTyping(300);
+        s.res.forEach((r,i)=>{
+          setTimeout(()=>{removeTyping();addAI(r.t,r.c);if(i<s.res.length-1)addTyping();},1100+i*950);
+        });
+        const sd=1100+s.res.length*950+350;
+        setTimeout(()=>{
+          document.getElementById('scon').innerHTML=`<div class="sbanner"><div style="font-size:21px;">⚡</div><div><div class="sbtxt">High stress detected</div><div class="sbsub">Switching to Assist Mode</div></div></div>`;
+          setTimeout(()=>showScreen('sp'),2000);
+        },sd);
+      },900);
+    }
+    showScreen('sc');
+  }
+
+  function addAI(txt,cls,dly){
+    dly=dly||0;
+    setTimeout(()=>{
+      const m=document.getElementById('cmsgs');
+      const d=document.createElement('div');
+      d.className='abub '+(cls||'');
+      d.style.animationDelay='0.05s';d.style.animationFillMode='forwards';
+      d.innerHTML='<div class="albl">Saarthi AI</div>'+txt;
+      m.appendChild(d);
+      const s=document.getElementById('cscroll');
+      setTimeout(()=>s.scrollTop=s.scrollHeight,80);
+    },dly);
+  }
+
+  function addUser(txt,dly){
+    dly=dly||0;
+    setTimeout(()=>{
+      const m=document.getElementById('cmsgs');
+      const d=document.createElement('div');
+      d.className='ubub';d.style.animationDelay='0.05s';d.style.animationFillMode='forwards';
+      d.textContent=txt;m.appendChild(d);
+      const s=document.getElementById('cscroll');
+      setTimeout(()=>s.scrollTop=s.scrollHeight,80);
+    },dly);
+  }
+
+  function addTyping(dly){
+    dly=dly||0;
+    setTimeout(()=>{
+      const m=document.getElementById('cmsgs');
+      const d=document.createElement('div');
+      d.className='abub';d.id='typ';
+      d.style.animationDelay='0.05s';d.style.animationFillMode='forwards';
+      d.innerHTML='<div class="tdots"><span></span><span></span><span></span></div>';
+      m.appendChild(d);
+      const s=document.getElementById('cscroll');
+      setTimeout(()=>s.scrollTop=s.scrollHeight,80);
+    },dly);
+  }
+
+  function removeTyping(){const t=document.getElementById('typ');if(t)t.remove();}
+
+  function sendMsg(){
+    const inp=document.getElementById('minput');
+    const txt=inp.value.trim();if(!txt)return;
+    inp.value='';addUser(txt);
+    const lo=txt.toLowerCase();
+    let dt=curType;
+    if(lo.includes('heart')||lo.includes('chest')||lo.includes('cardiac'))dt='heart';
+    else if(lo.includes('chok')||lo.includes('breath')||lo.includes('asthma'))dt='breathing';
+    else if(lo.includes('bleed')||lo.includes('cut')||lo.includes('wound'))dt='bleeding';
+    else if(lo.includes('uncons')||lo.includes('collaps')||lo.includes('faint')||lo.includes('respond'))dt='unconscious';
+    else if(lo.includes('accident')||lo.includes('crash')||lo.includes('road'))dt='accident';
+    else if(lo.includes('fire')||lo.includes('smoke')||lo.includes('burn'))dt='fire';
+    else if(lo.includes('attack')||lo.includes('rob')||lo.includes('crime')||lo.includes('threat'))dt='crime';
+    if(dt!==curType){curType=dt;updatePanic();updateCards();updateTL();}
+    const s=D[curType];
+    addTyping(200);
+    s.res.forEach((r,i)=>{
+      setTimeout(()=>{removeTyping();addAI(r.t,r.c);if(i<s.res.length-1)addTyping();},900+i*900);
+    });
+    setTimeout(()=>{
+      document.getElementById('scon').innerHTML=`<div class="sbanner"><div style="font-size:21px;">⚡</div><div><div class="sbtxt">High stress detected</div><div class="sbsub">Switching to Assist Mode</div></div></div>`;
+      setTimeout(()=>showScreen('sp'),2000);
+    },900+s.res.length*900+300);
+  }
+
+  document.getElementById('minput').addEventListener('keydown',e=>{if(e.key==='Enter')sendMsg();});
+
+  function trigSOS(){showScreen('ssos');}
+
+  function updatePanic(){
+    const s=D[curType];
+    document.getElementById('pcalllbl').textContent=s.call;
+    document.getElementById('pscenlbl').textContent=s.plbl;
+    document.getElementById('pbadge').textContent='ASSIST — '+s.title.toUpperCase().slice(0,14);
+  }
+
+  function updateCards(){
+    const s=D[curType];
+    document.getElementById('ctitle').textContent=s.ctitle;
+    document.getElementById('csub').textContent=s.csub;
+    document.getElementById('scgrid').innerHTML=s.cards.map(c=>`
+      <div class="scard" style="border-color:${c.bc};">
+        <div class="sbico" style="background:${c.bg};">${c.i}</div>
+        <div class="sblbl">${c.l}</div>
+      </div>`).join('');
+  }
+
+  function updateTL(){
+    const s=D[curType];
+    const d=document.getElementById('tldesc');
+    const g=document.getElementById('tlguid');
+    if(d)d.textContent=s.tld;if(g)g.textContent=s.tlg;
+  }
+
+  function nxtVoice(){
+    const s=D[curType];
+    vstp=(vstp+1)%s.vs.length;
+    const el=document.getElementById('vinst');
+    el.style.animation='none';el.offsetHeight;
+    el.style.animation='fdi 0.5s ease';
+    el.textContent=s.vs[vstp];
+  }
+
+  updatePanic();updateCards();updateTL();
+  updateCards();
+</script>
