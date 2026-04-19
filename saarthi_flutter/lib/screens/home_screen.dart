@@ -3,6 +3,7 @@ import '../utils/responsive.dart';
 import '../widgets/animated_press_card.dart';
 import 'chat_screen.dart';
 import 'medical_screen.dart';
+import '../services/offline_inference.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -134,10 +135,10 @@ class HomeScreen extends StatelessWidget {
       mainAxisSpacing: 10,
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      childAspectRatio: r.isDesktop ? 1.0 : (r.isTablet ? 1.1 : 1.5),
+      childAspectRatio: r.isDesktop ? 1.0 : (r.isTablet ? 0.95 : 0.9),
       children: [
         _buildGridCard(context, '🚗', 'accident', 'Crash · Fall · Injury', const Color.fromRGBO(229, 57, 53, 0.3), const Color.fromRGBO(229, 57, 53, 0.15), 'Accident'),
-        _buildGridCard(context, '🏥', 'medical', 'Heart · Breathing · More', const Color.fromRGBO(21, 101, 192, 0.3), const Color.fromRGBO(21, 101, 192, 0.15), 'Medical', isRouteToMedical: true),
+        _buildGridCard(context, '🩺', 'medical', 'Heart · Asthma · Poison · More', const Color.fromRGBO(21, 101, 192, 0.3), const Color.fromRGBO(21, 101, 192, 0.15), 'Medical', isRouteToMedical: true),
         _buildGridCard(context, '🔥', 'fire', 'House · Smoke · Burns', const Color.fromRGBO(255, 143, 0, 0.3), const Color.fromRGBO(255, 143, 0, 0.15), 'Fire'),
         _buildGridCard(context, '🚨', 'crime', 'Theft · Assault · Unsafe', const Color.fromRGBO(46, 125, 50, 0.3), const Color.fromRGBO(46, 125, 50, 0.15), 'Crime / Threat'),
       ],
@@ -160,31 +161,38 @@ class HomeScreen extends StatelessWidget {
           }
         },
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.surface,
             border: Border.all(color: borderColor),
             borderRadius: BorderRadius.circular(18),
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              ExcludeSemantics(
-                child: Container(
-                  width: 42, height: 42,
-                  decoration: BoxDecoration(color: bgColor, borderRadius: BorderRadius.circular(11)),
-                  child: Center(child: Text(icon, style: const TextStyle(fontSize: 21))),
-                ),
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+          child: Center(
+            child: SingleChildScrollView(
+              physics: const NeverScrollableScrollPhysics(),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(title, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
-                  Text(sub, style: const TextStyle(fontSize: 10, color: Colors.white54)),
+                  ExcludeSemantics(
+                    child: Container(
+                      width: 44, height: 44,
+                      decoration: BoxDecoration(color: bgColor, borderRadius: BorderRadius.circular(12)),
+                      child: Center(child: Text(icon, style: const TextStyle(fontSize: 22))),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(title, textAlign: TextAlign.center, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                      const SizedBox(height: 4),
+                      Text(sub, textAlign: TextAlign.center, style: const TextStyle(fontSize: 10, color: Colors.white54, height: 1.2)),
+                    ],
+                  )
                 ],
-              )
-            ],
+              ),
+            ),
           ),
         ),
       ),
@@ -192,43 +200,59 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _buildQuickPrompts(BuildContext context) {
-    final prompts = ['Heart attack', 'Road crash', 'Fire nearby', 'Heavy bleeding', 'Unconscious person', 'Can\'t breathe'];
+    final prompts = [
+      {'text': 'Heart attack', 'lvl': 3, 'type': 'heart'},
+      {'text': 'Road crash', 'lvl': 2, 'type': 'accident'},
+      {'text': 'Fire nearby', 'lvl': 2, 'type': 'fire'},
+      {'text': 'Heavy bleeding', 'lvl': 3, 'type': 'bleeding'},
+      {'text': 'Unconscious person', 'lvl': 3, 'type': 'unconscious'},
+      {'text': 'Can\'t breathe, choking, difficulty in breathing', 'lvl': 3, 'type': 'breathing'},
+      {'text': 'Asthma attack', 'lvl': 2, 'type': 'asthma'},
+      {'text': 'Minor scratch', 'lvl': 0, 'type': 'minor_ailment'},
+    ];
+
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
-        children: prompts.map((e) {
-          // Map prompt text to the correct emergency type
-          const promptTypeMap = {
-            'heart': 'heart', 'crash': 'accident', 'fire': 'fire',
-            'bleed': 'bleeding', 'unconscious': 'unconscious', 'breathe': 'breathing',
-          };
-          final lo = e.toLowerCase();
-          String type = 'custom';
-          for (final entry in promptTypeMap.entries) {
-            if (lo.contains(entry.key)) {
-              type = entry.value;
-              break;
-            }
-          }
+        children: prompts.map((p) {
+          final text = p['text'] as String;
+          final severity = p['lvl'] as int;
+          final type = p['type'] as String;
+          
+          // Determine badge color
+          final badgeColor = severity == 3 ? Colors.red : (severity == 2 ? Colors.orange : (severity == 1 ? Colors.yellow : Colors.green));
 
           return Semantics(
             button: true,
-            label: 'Quick prompt: $e',
+            label: 'Quick prompt: $text (Severity Level $severity)',
             child: AnimatedPressCard(
               borderRadius: BorderRadius.circular(9),
-              glowColor: const Color(0x18FFFFFF),
+              glowColor: badgeColor.withOpacity(0.1),
               pressScale: 0.94,
               onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => ChatScreen(emergencyType: type))),
               child: Container(
                 margin: const EdgeInsets.only(right: 7),
-                padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 7),
-                constraints: const BoxConstraints(minHeight: Responsive.minTouchTarget),
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
                 decoration: BoxDecoration(
                   color: const Color(0xFF22222A),
-                  border: Border.all(color: Colors.white12),
+                  border: Border.all(color: badgeColor.withOpacity(0.3)),
                   borderRadius: BorderRadius.circular(9),
                 ),
-                child: Center(child: Text(e, style: const TextStyle(fontSize: 11))),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: badgeColor.withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: Text('Lvl $severity', style: TextStyle(color: badgeColor, fontSize: 8, fontWeight: FontWeight.bold)),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(text, style: const TextStyle(fontSize: 11)),
+                  ],
+                ),
               ),
             ),
           );

@@ -9,7 +9,7 @@ final Map<String, EmergencyProtocol> mockEmergencyData = {
     color: const Color.fromRGBO(21, 101, 192, 0.15),
     callLabel: 'Call Ambulance',
     panicLabel: '● Cardiac emergency detected',
-    initialMsg: 'My father is having a heart attack',
+    initialMsg: 'Victim is having a heart attack',
     responses: const [
       EmergencyResponse(text: '🫀 Possible cardiac arrest — acting immediately', styleClass: 'urg'),
       EmergencyResponse(text: '📞 Calling 112 — ambulance dispatched', styleClass: 'urg'),
@@ -43,7 +43,7 @@ final Map<String, EmergencyProtocol> mockEmergencyData = {
     color: const Color.fromRGBO(255, 143, 0, 0.15),
     callLabel: 'Call Ambulance',
     panicLabel: '● Breathing emergency detected',
-    initialMsg: 'My mother is choking and cannot breathe',
+    initialMsg: 'Victim is choking and cannot breathe',
     responses: const [
       EmergencyResponse(text: '😮‍💨 Breathing emergency — responding now', styleClass: 'urg'),
       EmergencyResponse(text: '📞 Call 112 immediately', styleClass: 'urg'),
@@ -78,7 +78,7 @@ final Map<String, EmergencyProtocol> mockEmergencyData = {
     color: const Color.fromRGBO(21, 101, 192, 0.15),
     callLabel: 'Call Ambulance',
     panicLabel: '● Asthma emergency detected',
-    initialMsg: 'I am having a severe asthma attack',
+    initialMsg: 'Victim is having a severe asthma attack',
     responses: const [
       EmergencyResponse(text: '🫁 Asthma attack detected — stay calm and breathe with me', styleClass: 'urg'),
       EmergencyResponse(text: '📞 If no inhaler or worsening: Call 112 immediately', styleClass: 'urg'),
@@ -112,7 +112,7 @@ final Map<String, EmergencyProtocol> mockEmergencyData = {
     color: const Color.fromRGBO(183, 28, 28, 0.15),
     callLabel: 'Call Ambulance',
     panicLabel: '● Severe bleeding detected',
-    initialMsg: 'My brother has a deep cut and is bleeding heavily',
+    initialMsg: 'Victim has a deep cut and is bleeding heavily',
     responses: const [
       EmergencyResponse(text: '🩸 Severe bleeding detected — act immediately', styleClass: 'urg'),
       EmergencyResponse(text: '📞 Call 112 — request ambulance', styleClass: 'urg'),
@@ -146,7 +146,7 @@ final Map<String, EmergencyProtocol> mockEmergencyData = {
     color: const Color.fromRGBO(21, 101, 192, 0.15),
     callLabel: 'Call Ambulance',
     panicLabel: '● Unresponsive person detected',
-    initialMsg: 'My father collapsed and is not responding to me',
+    initialMsg: 'Victim collapsed and is not responding to me',
     responses: const [
       EmergencyResponse(text: '🫥 Unresponsive person — checking vitals protocol', styleClass: 'urg'),
       EmergencyResponse(text: '📞 Call 112 immediately', styleClass: 'urg'),
@@ -181,7 +181,7 @@ final Map<String, EmergencyProtocol> mockEmergencyData = {
     color: const Color.fromRGBO(229, 57, 53, 0.15),
     callLabel: 'Call Ambulance + Police',
     panicLabel: '● Road accident detected',
-    initialMsg: 'My father was in a road accident and is injured',
+    initialMsg: 'Victim was in a road accident and is injured',
     responses: const [
       EmergencyResponse(text: '🚗 Road accident detected', styleClass: 'urg'),
       EmergencyResponse(text: '📞 Call 112 (ambulance) and 100 (police)', styleClass: 'urg'),
@@ -251,7 +251,7 @@ final Map<String, EmergencyProtocol> mockEmergencyData = {
     color: const Color.fromRGBO(46, 125, 50, 0.15),
     callLabel: 'Call Police',
     panicLabel: '● Threat situation detected',
-    initialMsg: 'My father is being attacked and robbed',
+    initialMsg: 'Victim is being attacked and robbed',
     responses: const [
       EmergencyResponse(text: '🚨 Threat situation — taking immediate action', styleClass: 'urg'),
       EmergencyResponse(text: '📞 Call 100 (police) — stay on the line', styleClass: 'urg'),
@@ -286,7 +286,7 @@ final Map<String, EmergencyProtocol> mockEmergencyData = {
     color: const Color.fromRGBO(121, 85, 72, 0.15),
     callLabel: 'Call Poison Control',
     panicLabel: '● Toxic substance detected',
-    initialMsg: 'I think someone swallowed poison',
+    initialMsg: 'Victim has swallowed poison',
     responses: const [
       EmergencyResponse(text: '🧪 Poisoning detected — acting immediately', styleClass: 'urg'),
       EmergencyResponse(text: '📞 Call 112 (Ambulance) or Poison Control now', styleClass: 'urg'),
@@ -321,7 +321,7 @@ final Map<String, EmergencyProtocol> mockEmergencyData = {
     color: const Color.fromRGBO(46, 125, 50, 0.15),
     callLabel: 'Contact Doctor',
     panicLabel: '● Minor issue detected',
-    initialMsg: 'I have a minor headache',
+    initialMsg: 'Victim has a minor headache',
     responses: const [
       EmergencyResponse(text: '🩹 This looks like a minor ailment — I\'ll guide you through basic first aid', styleClass: 'suc'),
       EmergencyResponse(text: '💧 Drink some water and stay hydrated', styleClass: 'inf'),

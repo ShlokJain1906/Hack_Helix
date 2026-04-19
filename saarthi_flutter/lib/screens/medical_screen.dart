@@ -46,13 +46,19 @@ class MedicalScreen extends StatelessWidget {
                 child: ListView(
                   padding: EdgeInsets.symmetric(horizontal: r.horizontalPadding),
                   children: [
-                    _buildSubCard(context, r, '❤️', 'heart', 'Heart Attack', 'Chest pain, arm pain, sweating', const Color.fromRGBO(229, 57, 53, 0.3), const Color.fromRGBO(229, 57, 53, 0.15)),
+                    _buildSubCard(context, r, '❤️', 'heart', 'Heart Attack', 'Chest pain, sweating, cardiac arrest', const Color.fromRGBO(229, 57, 53, 0.3), const Color.fromRGBO(229, 57, 53, 0.15)),
                     SizedBox(height: r.vPad(9)),
-                    _buildSubCard(context, r, '😮‍💨', 'breathing', 'Breathing Issue', 'Choking, asthma, can\'t breathe', const Color.fromRGBO(255, 143, 0, 0.3), const Color.fromRGBO(255, 143, 0, 0.15)),
+                    _buildSubCard(context, r, '🫁', 'asthma', 'Asthma Attack', 'Inhaler needed, wheezing, breathless', const Color.fromRGBO(21, 101, 192, 0.3), const Color.fromRGBO(21, 101, 192, 0.15)),
                     SizedBox(height: r.vPad(9)),
-                    _buildSubCard(context, r, '🩸', 'bleeding', 'Severe Bleeding', 'Deep cut, wound, blood loss', const Color.fromRGBO(183, 28, 28, 0.3), const Color.fromRGBO(183, 28, 28, 0.15)),
+                    _buildSubCard(context, r, '😮‍💨', 'breathing', 'Choking / Airway', 'Object stuck, Heimlich maneuver', const Color.fromRGBO(255, 143, 0, 0.3), const Color.fromRGBO(255, 143, 0, 0.15)),
                     SizedBox(height: r.vPad(9)),
-                    _buildSubCard(context, r, '🫥', 'unconscious', 'Unconscious Person', 'Collapsed, unresponsive, fainted', const Color.fromRGBO(21, 101, 192, 0.3), const Color.fromRGBO(21, 101, 192, 0.15)),
+                    _buildSubCard(context, r, '🩸', 'bleeding', 'Severe Bleeding', 'Deep cut, wound, heavy blood loss', const Color.fromRGBO(183, 28, 28, 0.3), const Color.fromRGBO(183, 28, 28, 0.15)),
+                    SizedBox(height: r.vPad(9)),
+                    _buildSubCard(context, r, '🧪', 'poisoning', 'Poisoning / Overdose', 'Toxic intake, chemicals, pills', const Color.fromRGBO(121, 85, 72, 0.3), const Color.fromRGBO(121, 85, 72, 0.15)),
+                    SizedBox(height: r.vPad(9)),
+                    _buildSubCard(context, r, '🫥', 'unconscious', 'Unresponsive', 'Collapsed, fainted, no response', const Color.fromRGBO(46, 125, 50, 0.3), const Color.fromRGBO(46, 125, 50, 0.15)),
+                    SizedBox(height: r.vPad(9)),
+                    _buildSubCard(context, r, '🩹', 'minor_ailment', 'Minor Ailment', 'Headache, stomach ache, scratch', const Color.fromRGBO(255, 255, 255, 0.2), const Color.fromRGBO(255, 255, 255, 0.1)),
                   ],
                 ),
               ),
@@ -98,13 +104,14 @@ class MedicalScreen extends StatelessWidget {
         },
         child: Container(
           padding: const EdgeInsets.all(15),
-          constraints: const BoxConstraints(minHeight: 72),
+          constraints: const BoxConstraints(minHeight: 80),
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.surface,
             border: Border.all(color: borderColor),
             borderRadius: BorderRadius.circular(15),
           ),
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ExcludeSemantics(
                 child: Container(
@@ -116,7 +123,8 @@ class MedicalScreen extends StatelessWidget {
               const SizedBox(width: 14),
               Expanded(
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start, // Keep text left-aligned relative to each other but centered in card
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(title, style: TextStyle(fontSize: 14 * r.fontScale, fontWeight: FontWeight.bold)),
                     const SizedBox(height: 2),
