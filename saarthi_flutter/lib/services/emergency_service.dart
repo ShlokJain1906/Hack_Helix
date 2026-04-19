@@ -90,12 +90,13 @@ class EmergencyService extends ChangeNotifier {
     // Fallback classification logic (keyword → emergency type)
     const classificationMap = {
       'heart': 'heart', 'chest': 'heart', 'cardiac': 'heart',
-      'chok': 'breathing', 'breath': 'breathing', 'asthma': 'breathing',
+      'chok': 'breathing', 'breath': 'breathing', 'asthma': 'asthma',
       'bleed': 'bleeding', 'cut': 'bleeding', 'wound': 'bleeding',
       'uncons': 'unconscious', 'collaps': 'unconscious', 'faint': 'unconscious', 'respond': 'unconscious',
       'accident': 'accident', 'crash': 'accident', 'road': 'accident',
       'fire': 'fire', 'smoke': 'fire', 'burn': 'fire',
       'attack': 'crime', 'rob': 'crime', 'crime': 'crime', 'threat': 'crime',
+      'poison': 'poisoning', 'chemicals': 'poisoning', 'overdose': 'poisoning',
       'headache': 'minor_ailment', 'stomach': 'minor_ailment', 'scratch': 'minor_ailment', 'papercut': 'minor_ailment',
     };
     String newType = currentProtocol?.id ?? 'custom';

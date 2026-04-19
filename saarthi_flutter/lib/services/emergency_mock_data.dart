@@ -70,6 +70,41 @@ final Map<String, EmergencyProtocol> mockEmergencyData = {
       'If they collapse: begin CPR and rescue breaths.'
     ],
   ),
+  'asthma': EmergencyProtocol(
+
+    id: 'asthma',
+    icon: '🫁',
+    title: 'Asthma Attack',
+    color: const Color.fromRGBO(21, 101, 192, 0.15),
+    callLabel: 'Call Ambulance',
+    panicLabel: '● Asthma emergency detected',
+    initialMsg: 'I am having a severe asthma attack',
+    responses: const [
+      EmergencyResponse(text: '🫁 Asthma attack detected — stay calm and breathe with me', styleClass: 'urg'),
+      EmergencyResponse(text: '📞 If no inhaler or worsening: Call 112 immediately', styleClass: 'urg'),
+      EmergencyResponse(text: '🧘 Sit the person upright — do NOT let them lie down', styleClass: 'wrn'),
+      EmergencyResponse(text: '💨 Help them use their blue (reliever) inhaler — 1 puff every 30-60 seconds', styleClass: 'wrn'),
+      EmergencyResponse(text: '😮‍💨 Encourage slow, steady breaths while waiting for help', styleClass: 'inf'),
+    ],
+    timelineDesc: 'Asthma attack — inhaler protocol started',
+    timelineGuidance: 'Respiratory support guidance started',
+    cardTitle: 'Asthma Protocol',
+    cardSub: 'Inhaler / breathing response',
+    cards: const [
+      EmergencyActionCard(icon: '🧘', label: 'Sit Upright', borderColor: Color.fromRGBO(21, 101, 192, 0.3), bgColor: Color.fromRGBO(21, 101, 192, 0.15)),
+      EmergencyActionCard(icon: '💨', label: 'Use Inhaler', borderColor: Color.fromRGBO(46, 125, 50, 0.3), bgColor: Color.fromRGBO(46, 125, 50, 0.15)),
+      EmergencyActionCard(icon: '📞', label: 'Call 112', borderColor: Color.fromRGBO(229, 57, 53, 0.3), bgColor: Color.fromRGBO(229, 57, 53, 0.15)),
+      EmergencyActionCard(icon: '😮‍💨', label: 'Slow Breath', borderColor: Color.fromRGBO(255, 143, 0, 0.3), bgColor: Color.fromRGBO(255, 143, 0, 0.15)),
+    ],
+    voiceSteps: const [
+      'Sit up straight. Do not lie down.',
+      'Take one puff of your reliever inhaler.',
+      'Breathe in slowly and out slowly.',
+      'If you feel worse, use the inhaler again.',
+      'Help is on the way. Keep sitting up.',
+      'Try to stay as calm as possible.'
+    ],
+  ),
   'bleeding': EmergencyProtocol(
     id: 'bleeding',
     icon: '🩸',
@@ -244,7 +279,42 @@ final Map<String, EmergencyProtocol> mockEmergencyData = {
       'Police are on the way. Stay hidden and quiet.'
     ],
   ),
+  'poisoning': EmergencyProtocol(
+    id: 'poisoning',
+    icon: '🧪',
+    title: 'Poisoning / Overdose',
+    color: const Color.fromRGBO(121, 85, 72, 0.15),
+    callLabel: 'Call Poison Control',
+    panicLabel: '● Toxic substance detected',
+    initialMsg: 'I think someone swallowed poison',
+    responses: const [
+      EmergencyResponse(text: '🧪 Poisoning detected — acting immediately', styleClass: 'urg'),
+      EmergencyResponse(text: '📞 Call 112 (Ambulance) or Poison Control now', styleClass: 'urg'),
+      EmergencyResponse(text: '🚫 Do NOT induce vomiting unless instructed by a professional', styleClass: 'wrn'),
+      EmergencyResponse(text: '🥛 Do NOT give the person anything to drink or eat', styleClass: 'wrn'),
+      EmergencyResponse(text: '📦 Locate the container of the substance for identification', styleClass: 'inf'),
+    ],
+    timelineDesc: 'Toxic exposure — substance reported',
+    timelineGuidance: 'Poisoning control guidance started',
+    cardTitle: 'Poison Protocol',
+    cardSub: 'Toxic substance response',
+    cards: const [
+      EmergencyActionCard(icon: '📞', label: 'Call Control', borderColor: Color.fromRGBO(229, 57, 53, 0.3), bgColor: Color.fromRGBO(229, 57, 53, 0.15)),
+      EmergencyActionCard(icon: '🚫', label: 'No Vomiting', borderColor: Color.fromRGBO(183, 28, 28, 0.3), bgColor: Color.fromRGBO(183, 28, 28, 0.15)),
+      EmergencyActionCard(icon: '📦', label: 'Check Label', borderColor: Color.fromRGBO(21, 101, 192, 0.3), bgColor: Color.fromRGBO(21, 101, 192, 0.15)),
+      EmergencyActionCard(icon: '😮‍💨', label: 'Stay Calm', borderColor: Color.fromRGBO(46, 125, 50, 0.3), bgColor: Color.fromRGBO(46, 125, 50, 0.15)),
+    ],
+    voiceSteps: const [
+      'What did they swallow? Find the bottle.',
+      'Do not make them throw up.',
+      'Call poison control immediately.',
+      'Check if they are conscious.',
+      'If they stop breathing, start CPR.',
+      'Keep the substance container ready for the doctor.'
+    ],
+  ),
   'minor_ailment': EmergencyProtocol(
+
     id: 'minor_ailment',
     icon: '🩹',
     title: 'Minor Ailment',
