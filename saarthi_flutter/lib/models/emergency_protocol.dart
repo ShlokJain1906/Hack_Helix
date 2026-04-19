@@ -2,13 +2,19 @@ import 'package:flutter/material.dart';
 
 class EmergencyActionCard {
   final String icon;
+  final IconData materialIcon;
   final String label;
+  final String summary;
+  final List<String> detailedSteps;
   final Color borderColor;
   final Color bgColor;
 
   const EmergencyActionCard({
     required this.icon,
+    required this.materialIcon,
     required this.label,
+    required this.summary,
+    required this.detailedSteps,
     required this.borderColor,
     required this.bgColor,
   });

@@ -4,6 +4,7 @@ import '../services/emergency_service.dart';
 import '../utils/responsive.dart';
 import '../widgets/animated_press_card.dart';
 import 'assist_mode_screen.dart';
+import 'action_steps_screen.dart';
 
 class ChatScreen extends StatefulWidget {
   final String emergencyType;
@@ -17,11 +18,14 @@ class _ChatScreenState extends State<ChatScreen> {
   final TextEditingController _inputController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
 
+  late EmergencyService _service;
+
   @override
   void initState() {
     super.initState();
+    _service = context.read<EmergencyService>();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<EmergencyService>().startEmergency(widget.emergencyType);
+      _service.startEmergency(widget.emergencyType);
     });
   }
 
@@ -117,6 +121,17 @@ class _ChatScreenState extends State<ChatScreen> {
                         const SizedBox(width: 5),
                         const Text('Live', style: TextStyle(fontSize: 11, color: Colors.white54)),
                         const SizedBox(width: 10),
+                        // ── Severity Badge ──
+                        if (service.currentSeverity > 0)
+                          Container(
+                            margin: const EdgeInsets.only(right: 10),
+                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                            decoration: BoxDecoration(
+                              color: service.currentSeverity >= 2 ? Colors.red : Colors.orange,
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                            child: Text('Lvl ${service.currentSeverity}', style: const TextStyle(fontSize: 9, fontWeight: FontWeight.bold)),
+                          ),
                         // ── SOS Button ──
                         Semantics(
                           button: true,
@@ -175,8 +190,11 @@ class _ChatScreenState extends State<ChatScreen> {
                 ),
               ),
 
-              // ── High-stress banner (info only, no auto-redirect) ──
-              if (service.isStressHigh) _buildStressBanner(),
+              // ── High-stress banner or Critical Confirmation ──
+              if (service.requiresCriticalConfirmation)
+                _buildCriticalConfirmationCard(service)
+              else if (service.isStressHigh)
+                _buildStressBanner(),
 
               // ── Input bar ──
               Padding(
@@ -347,6 +365,82 @@ class _ChatScreenState extends State<ChatScreen> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildCriticalConfirmationCard(EmergencyService service) {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: Responsive(context).horizontalPadding, vertical: 8),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: const Color(0xFF1C1818),
+        border: Border.all(color: const Color.fromRGBO(229, 57, 53, 0.45), width: 1.5),
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: const [BoxShadow(color: Color.fromRGBO(229, 57, 53, 0.15), blurRadius: 12, spreadRadius: 2)],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Row(
+            children: [
+              Icon(Icons.warning_rounded, color: Colors.redAccent, size: 22),
+              SizedBox(width: 8),
+              Expanded(child: Text('Critical Emergency Detected', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Colors.redAccent))),
+            ],
+          ),
+          const SizedBox(height: 8),
+          const Text('Do you need to dispatch emergency services immediately?', style: TextStyle(fontSize: 13, height: 1.4)),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              Expanded(
+                child: AnimatedPressCard(
+                  borderRadius: BorderRadius.circular(10),
+                  glowColor: const Color(0x22FFFFFF),
+                  onTap: () {
+                    service.clearCriticalConfirmation();
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    decoration: BoxDecoration(color: const Color(0xFF2A2A35), borderRadius: BorderRadius.circular(10)),
+                    child: const Center(child: Text('NO, I\'M OKAY', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.white70))),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: AnimatedPressCard(
+                  borderRadius: BorderRadius.circular(10),
+                  glowColor: const Color.fromRGBO(229, 57, 53, 0.4),
+                  onTap: () {
+                    service.clearCriticalConfirmation();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Row(
+                          children: [
+                            Icon(Icons.check_circle, color: Colors.white),
+                            SizedBox(width: 10),
+                            Expanded(child: Text('SOS & Location Dispatched!')),
+                          ],
+                        ),
+                        backgroundColor: Colors.green,
+                        duration: Duration(seconds: 4),
+                        behavior: SnackBarBehavior.floating,
+                      ),
+                    );
+                    Navigator.push(context, MaterialPageRoute(builder: (_) => const ActionStepsScreen()));
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    decoration: BoxDecoration(color: const Color(0xFFE53935), borderRadius: BorderRadius.circular(10)),
+                    child: const Center(child: Text('YES, DISPATCH', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.white))),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

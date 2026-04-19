@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import '../models/emergency_protocol.dart';
 import 'emergency_mock_data.dart';
+import 'offline_inference.dart';
 
 class ChatMessage {
   final String text;
@@ -16,12 +17,16 @@ class EmergencyService extends ChangeNotifier {
   bool isTyping = false;
   int currentVoiceStep = 0;
   bool isStressHigh = false;
+  int currentSeverity = 0;
+  bool requiresCriticalConfirmation = false;
 
   void startEmergency(String typeId) {
     currentProtocol = mockEmergencyData[typeId] ?? mockEmergencyData['custom']!;
     chatMessages.clear();
     currentVoiceStep = 0;
     isStressHigh = false;
+    currentSeverity = 0;
+    requiresCriticalConfirmation = false;
     isTyping = false;
     notifyListeners();
     
@@ -47,16 +52,30 @@ class EmergencyService extends ChangeNotifier {
       setTyping(false);
       addAiMessage(currentProtocol!.responses[i].text, styleClass: currentProtocol!.responses[i].styleClass);
     }
-    
-    // Simulate high stress detection at the end of the script
-    await Future.delayed(const Duration(milliseconds: 600));
-    isStressHigh = true;
-    notifyListeners();
   }
 
   void submitUserMessage(String text) async {
     if (text.isEmpty) return;
     addUserMessage(text);
+    
+    // Evaluate severity using the offline ML model
+    currentSeverity = OfflineInference.analyzeSeverity(text);
+    if (kDebugMode) {
+      print('--- Offline ML Prediction ---');
+      print('Input: "$text"');
+      print('Predicted Severity Score: $currentSeverity / 3');
+      print('-----------------------------');
+    }
+    
+    // If severity is High or Critical, instantly show the stress banner
+    if (currentSeverity >= 2) {
+      isStressHigh = true;
+    }
+    // If Critical, ask for confirmation
+    if (currentSeverity == 3) {
+      requiresCriticalConfirmation = true;
+    }
+    notifyListeners();
     
     // Fallback classification logic (keyword → emergency type)
     const classificationMap = {
@@ -97,6 +116,11 @@ class EmergencyService extends ChangeNotifier {
 
   void setTyping(bool typing) {
     isTyping = typing;
+    notifyListeners();
+  }
+
+  void clearCriticalConfirmation() {
+    requiresCriticalConfirmation = false;
     notifyListeners();
   }
 
