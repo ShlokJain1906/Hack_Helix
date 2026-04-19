@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class EmergencyActionCard {
   final String icon;
-  final IconData materialIcon;
+  final IconData? materialIcon;
   final String label;
   final String summary;
   final List<String> detailedSteps;
@@ -11,10 +11,10 @@ class EmergencyActionCard {
 
   const EmergencyActionCard({
     required this.icon,
-    required this.materialIcon,
+    this.materialIcon,
     required this.label,
-    required this.summary,
-    required this.detailedSteps,
+    this.summary = '',
+    this.detailedSteps = const [],
     required this.borderColor,
     required this.bgColor,
   });
