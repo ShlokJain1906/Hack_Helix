@@ -244,7 +244,41 @@ final Map<String, EmergencyProtocol> mockEmergencyData = {
       'Police are on the way. Stay hidden and quiet.'
     ],
   ),
+  'minor_ailment': EmergencyProtocol(
+    id: 'minor_ailment',
+    icon: '🩹',
+    title: 'Minor Ailment',
+    color: const Color.fromRGBO(46, 125, 50, 0.15),
+    callLabel: 'Contact Doctor',
+    panicLabel: '● Minor issue detected',
+    initialMsg: 'I have a minor headache',
+    responses: const [
+      EmergencyResponse(text: '🩹 This looks like a minor ailment — I\'ll guide you through basic first aid', styleClass: 'suc'),
+      EmergencyResponse(text: '💧 Drink some water and stay hydrated', styleClass: 'inf'),
+      EmergencyResponse(text: '🛌 Rest in a quiet, dark room if possible', styleClass: 'inf'),
+      EmergencyResponse(text: '💊 Consider a mild painkiller like paracetamol if safe for you', styleClass: 'inf'),
+    ],
+    timelineDesc: 'Minor ailment — symptoms reported',
+    timelineGuidance: 'Basic first-aid guidance started',
+    cardTitle: 'Care Protocol',
+    cardSub: 'Basic first-aid',
+    cards: const [
+      EmergencyActionCard(icon: '💧', label: 'Hydrate', borderColor: Color.fromRGBO(46, 125, 50, 0.3), bgColor: Color.fromRGBO(46, 125, 50, 0.15)),
+      EmergencyActionCard(icon: '🛌', label: 'Rest', borderColor: Color.fromRGBO(21, 101, 192, 0.3), bgColor: Color.fromRGBO(21, 101, 192, 0.15)),
+      EmergencyActionCard(icon: '💊', label: 'Medication', borderColor: Color.fromRGBO(255, 143, 0, 0.3), bgColor: Color.fromRGBO(255, 143, 0, 0.15)),
+      EmergencyActionCard(icon: '😮‍', label: 'Stay Calm', borderColor: Color.fromRGBO(121, 85, 72, 0.3), bgColor: Color.fromRGBO(121, 85, 72, 0.15)),
+    ],
+    voiceSteps: const [
+      'Take a deep breath. You are safe.',
+      'Drink a glass of water slowly.',
+      'If your head hurts, find a quiet place to sit.',
+      'Check if you have any other symptoms.',
+      'If the pain gets worse, contact a professional.',
+      'I am here to help you feel better.'
+    ],
+  ),
   'custom': EmergencyProtocol(
+
     id: 'custom',
     icon: '🚨',
     title: 'Emergency',

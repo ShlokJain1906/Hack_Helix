@@ -66,6 +66,16 @@ class EmergencyService extends ChangeNotifier {
       print('Predicted Severity Score: $currentSeverity / 3');
       print('-----------------------------');
     }
+
+    // Safety Override: Deterministic bumping for high-stress keywords
+    final lo = text.toLowerCase();
+    final highStressWords = ['major', 'severe', 'deep', 'heavy', 'critical', 'danger', 'bleeding'];
+    if (highStressWords.any((w) => lo.contains(w))) {
+      if (currentSeverity < 2) {
+        currentSeverity = 2; // Force at least Level 2 (High) for these words
+        if (kDebugMode) print('Severity bumped to 2 due to high-stress keyword.');
+      }
+    }
     
     // If severity is High or Critical, instantly show the stress banner
     if (currentSeverity >= 2) {
@@ -86,13 +96,30 @@ class EmergencyService extends ChangeNotifier {
       'accident': 'accident', 'crash': 'accident', 'road': 'accident',
       'fire': 'fire', 'smoke': 'fire', 'burn': 'fire',
       'attack': 'crime', 'rob': 'crime', 'crime': 'crime', 'threat': 'crime',
+      'headache': 'minor_ailment', 'stomach': 'minor_ailment', 'scratch': 'minor_ailment', 'papercut': 'minor_ailment',
     };
-    final lo = text.toLowerCase();
     String newType = currentProtocol?.id ?? 'custom';
-    for (final entry in classificationMap.entries) {
-      if (lo.contains(entry.key)) {
-        newType = entry.value;
-        break;
+    
+    if (currentSeverity == 0) {
+      // For low severity, prioritize the Minor Ailment protocol
+      if (lo.contains('headache') || lo.contains('scratch') || lo.contains('stomach') || lo.contains('minor')) {
+        newType = 'minor_ailment';
+      } else {
+        // Fallback search in map
+        for (final entry in classificationMap.entries) {
+          if (lo.contains(entry.key)) {
+            newType = entry.value;
+            break;
+          }
+        }
+      }
+    } else {
+      // For higher severity, look for serious protocols and ignore "minor" matches
+      for (final entry in classificationMap.entries) {
+        if (lo.contains(entry.key) && entry.value != 'minor_ailment') {
+          newType = entry.value;
+          break;
+        }
       }
     }
     

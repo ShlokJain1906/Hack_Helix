@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../models/emergency_protocol.dart';
 import '../services/emergency_service.dart';
 import '../utils/responsive.dart';
 import '../widgets/animated_press_card.dart';
@@ -144,11 +145,11 @@ class _ChatScreenState extends State<ChatScreen> {
                             child: Container(
                               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                               decoration: BoxDecoration(
-                                color: const Color(0xFFB71C1C),
+                                color: cur?.color.withOpacity(0.8) ?? const Color(0xFFB71C1C),
                                 borderRadius: BorderRadius.circular(10),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: const Color.fromRGBO(229, 57, 53, 0.4),
+                                    color: (cur?.color ?? const Color.fromRGBO(229, 57, 53, 0.4)).withOpacity(0.4),
                                     blurRadius: 8,
                                     spreadRadius: 0,
                                   ),
@@ -184,7 +185,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         return _buildTypingIndicator();
                       }
                       final msg = service.chatMessages[index];
-                      return msg.isUser ? _buildUserMessage(msg.text) : _buildAiMessage(msg.text, msg.styleClass);
+                      return msg.isUser ? _buildUserMessage(msg.text, cur) : _buildAiMessage(msg.text, msg.styleClass);
                     },
                   ),
                 ),
@@ -306,7 +307,7 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
-  Widget _buildUserMessage(String text) {
+  Widget _buildUserMessage(String text, EmergencyProtocol? cur) {
     return Semantics(
       label: 'You said: $text',
       child: Align(
@@ -315,7 +316,7 @@ class _ChatScreenState extends State<ChatScreen> {
           margin: const EdgeInsets.symmetric(vertical: 4),
           padding: const EdgeInsets.all(13),
           decoration: BoxDecoration(
-            color: Theme.of(context).primaryColor,
+            color: cur?.color.withOpacity(0.8) ?? Theme.of(context).primaryColor,
             borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(16), topRight: Radius.circular(16),
               bottomLeft: Radius.circular(16), bottomRight: Radius.circular(4),

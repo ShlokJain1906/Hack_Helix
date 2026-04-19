@@ -3,7 +3,7 @@ import os
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.ensemble import RandomForestClassifier
 
-# 1. Synthetic Dataset
+# 1. Synthetic Dataset - EXPANDED for better differentiation
 data = [
     # Low Severity (0)
     ("I stubbed my toe", 0),
@@ -11,6 +11,17 @@ data = [
     ("Feeling a bit dizzy but okay", 0),
     ("Got a small scratch on my arm", 0),
     ("Need some paracetamol", 0),
+    ("I have a headache and stomach ache", 0),
+    ("Just a minor scratch or papercut", 0),
+    ("My stomach is hurting", 0),
+    ("minor cut on finger", 0),
+    ("feeling okay now", 0),
+    ("small papercut", 0),
+    ("mild headache", 0),
+    ("minor scratch", 0),
+    ("it is just a scratch", 0),
+    ("small bruise", 0),
+    ("tiny cut", 0),
     
     # Medium Severity (1)
     ("I cut my finger and it's bleeding", 1),
@@ -18,6 +29,11 @@ data = [
     ("Someone fainted but they are breathing", 1),
     ("I sprained my ankle really badly", 1),
     ("Minor car bumper crash, no big injuries", 1),
+    ("Severe headache and blurred vision", 1),
+    ("Major papercut and bleeding", 1),
+    ("badly sprained wrist", 1),
+    ("pain is getting worse", 1),
+    ("difficulty walking", 1),
     
     # High Severity (2)
     ("There is a fire in the kitchen", 2),
@@ -25,7 +41,16 @@ data = [
     ("I see smoke coming from the building", 2),
     ("Major car accident, people are hurt", 2),
     ("I think I broke my arm bone is showing", 2),
-    
+    ("Fell down and snapped my bone, severe fracture", 2),
+    ("It's so hot, fainted outside in the sun, heat dehydrated", 2),
+    ("Heatstroke, very hot and dehydrated", 2),
+    ("Dog bite, rabid animal", 2),
+    ("I have a broken bone and fracture", 2),
+    ("Major scratch bleeding heavily", 2),
+    ("Deep scratch and losing a lot of blood", 2),
+    ("severe bleeding from arm", 2),
+    ("car crash injuries", 2),
+
     # Critical Severity (3)
     ("My mother collapsed and is not breathing", 3),
     ("Someone is choking and turning blue", 3),
@@ -34,17 +59,30 @@ data = [
     ("No pulse, heart stopped, need CPR", 3),
     ("My dad is having chest pains and sweating, think it's a heart attack", 3),
     ("Cardiac arrest, they are not breathing", 3),
+    ("Having a stroke, face drooping, slurred speech", 3),
+    ("Body is numb and face paralyzed, stroke", 3),
+    ("Having a seizure, shaking, convulsing, epilepsy", 3),
+    ("They are fitting and shaking violently", 3),
+    ("Swallowed poison, pills, chemicals, overdose", 3),
+    ("Drank chemicals and poison", 3),
+    ("Severe allergic reaction, throat closing", 3),
+    ("Bee sting, peanuts, swelling allergic", 3),
+    ("Drowning in the water pool", 3),
+    ("Submerged in ocean drowning", 3),
+    ("Snake bite, venom rabid animal", 3),
+    ("not breathing and unconscious", 3),
+    ("stopped breathing", 3),
 ]
 
 texts = [d[0] for d in data]
 labels = [d[1] for d in data]
 
 # 2. Vectorization (Bag of Words for simplicity in Dart)
-vectorizer = CountVectorizer(lowercase=True, stop_words='english', max_features=50)
+vectorizer = CountVectorizer(lowercase=True, stop_words='english', max_features=150)
 X = vectorizer.fit_transform(texts).toarray()
 
-# 3. Train Random Forest (Keep it small: 10 trees, max depth 5)
-rf = RandomForestClassifier(n_estimators=10, max_depth=5, random_state=42)
+# 3. Train Random Forest (Increase trees to 20, depth to 10 for more nuance)
+rf = RandomForestClassifier(n_estimators=20, max_depth=10, random_state=42)
 rf.fit(X, labels)
 
 # 4. Export to Dart
