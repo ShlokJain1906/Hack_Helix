@@ -3,7 +3,7 @@
 // Generated from Python scikit-learn.
 
 class MLModelData {
-  static const List<String> vocabulary = ["accident", "active", "ankle", "arm", "badly", "big", "bit", "bleeding", "blood", "blue", "breathing", "building", "bumper", "car", "chest", "choking", "collapsed", "coming", "crash", "got", "headache", "heart", "heavily", "hurt", "hurts", "injuries", "kitchen", "leg", "losing", "lot", "major", "minor", "mother", "need", "okay", "pains", "paracetamol", "people", "pulse", "really", "scratch", "shooter", "small", "smoke", "sprained", "stabbed", "stairs", "stopped", "stubbed", "sweating"];
+  static const List<String> vocabulary = ["accident", "active", "ankle", "arm", "arrest", "attack", "badly", "big", "bit", "bleeding", "blood", "blue", "bone", "breathing", "building", "car", "got", "having", "head", "heart", "heavily", "hurt", "hurts", "injuries", "kitchen", "leg", "losing", "lot", "major", "minor", "mother", "need", "okay", "pains", "paracetamol", "people", "pulse", "really", "scratch", "shooter", "showing", "small", "smoke", "sprained", "stabbed", "stairs", "stopped", "stubbed", "sweating", "think"];
 
   static int predictSeverity(List<double> features) {
     int vote0 = 0;
@@ -12,23 +12,23 @@ class MLModelData {
     int vote3 = 0;
 
     int tree0() {
-      if (features[31] <= 0.5) {
-        if (features[19] <= 0.5) {
+      if (features[7] <= 0.5) {
+        if (features[24] <= 0.5) {
           if (features[34] <= 0.5) {
-            if (features[21] <= 0.5) {
-              if (features[41] <= 0.5) {
-                return 2;
+            if (features[35] <= 0.5) {
+              if (features[1] <= 0.5) {
+                return 3;
               } else {
                 return 3;
               }
             } else {
-              return 3;
+              return 2;
             }
           } else {
             return 0;
           }
         } else {
-          return 3;
+          return 2;
         }
       } else {
         return 1;
@@ -42,26 +42,26 @@ class MLModelData {
     }
 
     int tree1() {
-      if (features[44] <= 0.5) {
-        if (features[42] <= 0.5) {
-          if (features[47] <= 0.5) {
+      if (features[31] <= 0.5) {
+        if (features[24] <= 0.5) {
+          if (features[38] <= 0.5) {
             if (features[43] <= 0.5) {
-              if (features[5] <= 0.5) {
-                return 2;
-              } else {
+              if (features[3] <= 0.5) {
                 return 1;
+              } else {
+                return 2;
               }
             } else {
-              return 2;
+              return 1;
             }
           } else {
-            return 3;
+            return 0;
           }
         } else {
-          return 0;
+          return 2;
         }
       } else {
-        return 1;
+        return 3;
       }
     }
     switch (tree1()) {
@@ -72,26 +72,26 @@ class MLModelData {
     }
 
     int tree2() {
-      if (features[39] <= 0.5) {
-        if (features[32] <= 0.5) {
-          if (features[23] <= 0.5) {
-            if (features[27] <= 0.5) {
-              if (features[29] <= 0.5) {
-                return 0;
-              } else {
+      if (features[28] <= 0.5) {
+        if (features[40] <= 0.5) {
+          if (features[29] <= 0.5) {
+            if (features[41] <= 0.5) {
+              if (features[6] <= 0.5) {
                 return 3;
+              } else {
+                return 1;
               }
             } else {
-              return 1;
+              return 0;
             }
           } else {
-            return 2;
+            return 0;
           }
         } else {
-          return 3;
+          return 2;
         }
       } else {
-        return 1;
+        return 2;
       }
     }
     switch (tree2()) {
@@ -102,11 +102,11 @@ class MLModelData {
     }
 
     int tree3() {
-      if (features[48] <= 0.5) {
-        if (features[26] <= 0.5) {
-          if (features[22] <= 0.5) {
-            if (features[36] <= 0.5) {
-              if (features[21] <= 0.5) {
+      if (features[47] <= 0.5) {
+        if (features[9] <= 0.5) {
+          if (features[32] <= 0.5) {
+            if (features[34] <= 0.5) {
+              if (features[1] <= 0.5) {
                 return 3;
               } else {
                 return 3;
@@ -115,10 +115,14 @@ class MLModelData {
               return 0;
             }
           } else {
-            return 2;
+            return 0;
           }
         } else {
-          return 2;
+          if (features[20] <= 0.5) {
+            return 1;
+          } else {
+            return 2;
+          }
         }
       } else {
         return 0;
@@ -132,26 +136,26 @@ class MLModelData {
     }
 
     int tree4() {
-      if (features[35] <= 0.5) {
-        if (features[3] <= 0.5) {
-          if (features[16] <= 0.5) {
-            if (features[24] <= 0.5) {
-              if (features[15] <= 0.5) {
-                return 2;
-              } else {
+      if (features[37] <= 0.5) {
+        if (features[41] <= 0.5) {
+          if (features[25] <= 0.5) {
+            if (features[0] <= 0.5) {
+              if (features[9] <= 0.5) {
                 return 3;
+              } else {
+                return 2;
               }
             } else {
-              return 1;
+              return 2;
             }
           } else {
-            return 3;
+            return 1;
           }
         } else {
           return 0;
         }
       } else {
-        return 2;
+        return 1;
       }
     }
     switch (tree4()) {
@@ -162,30 +166,30 @@ class MLModelData {
     }
 
     int tree5() {
-      if (features[35] <= 0.5) {
-        if (features[11] <= 0.5) {
-          if (features[12] <= 0.5) {
-            if (features[31] <= 0.5) {
-              if (features[42] <= 0.5) {
+      if (features[29] <= 0.5) {
+        if (features[0] <= 0.5) {
+          if (features[18] <= 0.5) {
+            if (features[46] <= 0.5) {
+              if (features[49] <= 0.5) {
                 return 3;
               } else {
-                return 0;
+                return 2;
               }
             } else {
-              return 0;
+              return 3;
             }
-          } else {
-            return 1;
-          }
-        } else {
-          if (features[17] <= 0.5) {
-            return 3;
           } else {
             return 2;
           }
+        } else {
+          return 2;
         }
       } else {
-        return 2;
+        if (features[15] <= 0.5) {
+          return 0;
+        } else {
+          return 1;
+        }
       }
     }
     switch (tree5()) {
@@ -197,25 +201,25 @@ class MLModelData {
 
     int tree6() {
       if (features[42] <= 0.5) {
-        if (features[41] <= 0.5) {
-          if (features[34] <= 0.5) {
-            if (features[49] <= 0.5) {
-              if (features[31] <= 0.5) {
+        if (features[32] <= 0.5) {
+          if (features[18] <= 0.5) {
+            if (features[14] <= 0.5) {
+              if (features[16] <= 0.5) {
                 return 2;
               } else {
                 return 0;
               }
             } else {
-              return 2;
+              return 3;
             }
           } else {
-            return 0;
+            return 2;
           }
         } else {
-          return 3;
+          return 0;
         }
       } else {
-        return 0;
+        return 2;
       }
     }
     switch (tree6()) {
@@ -226,23 +230,27 @@ class MLModelData {
     }
 
     int tree7() {
-      if (features[30] <= 0.5) {
-        if (features[14] <= 0.5) {
-          if (features[18] <= 0.5) {
-            if (features[15] <= 0.5) {
-              if (features[33] <= 0.5) {
-                return 0;
+      if (features[40] <= 0.5) {
+        if (features[8] <= 0.5) {
+          if (features[9] <= 0.5) {
+            if (features[31] <= 0.5) {
+              if (features[14] <= 0.5) {
+                return 3;
               } else {
-                return 0;
+                return 3;
               }
             } else {
-              return 3;
+              return 0;
             }
           } else {
-            return 1;
+            if (features[20] <= 0.5) {
+              return 1;
+            } else {
+              return 2;
+            }
           }
         } else {
-          return 2;
+          return 0;
         }
       } else {
         return 2;
@@ -256,17 +264,21 @@ class MLModelData {
     }
 
     int tree8() {
-      if (features[9] <= 0.5) {
-        if (features[29] <= 0.5) {
-          if (features[36] <= 0.5) {
-            if (features[3] <= 0.5) {
-              if (features[47] <= 0.5) {
+      if (features[11] <= 0.5) {
+        if (features[26] <= 0.5) {
+          if (features[16] <= 0.5) {
+            if (features[31] <= 0.5) {
+              if (features[43] <= 0.5) {
                 return 2;
               } else {
-                return 3;
+                return 1;
               }
             } else {
-              return 0;
+              if (features[34] <= 0.5) {
+                return 3;
+              } else {
+                return 0;
+              }
             }
           } else {
             return 0;
@@ -286,26 +298,30 @@ class MLModelData {
     }
 
     int tree9() {
-      if (features[44] <= 0.5) {
+      if (features[48] <= 0.5) {
         if (features[43] <= 0.5) {
-          if (features[30] <= 0.5) {
-            if (features[11] <= 0.5) {
-              if (features[12] <= 0.5) {
+          if (features[14] <= 0.5) {
+            if (features[28] <= 0.5) {
+              if (features[9] <= 0.5) {
                 return 1;
               } else {
                 return 1;
               }
             } else {
-              return 3;
+              return 2;
             }
           } else {
-            return 2;
+            if (features[39] <= 0.5) {
+              return 2;
+            } else {
+              return 3;
+            }
           }
         } else {
-          return 2;
+          return 1;
         }
       } else {
-        return 1;
+        return 3;
       }
     }
     switch (tree9()) {

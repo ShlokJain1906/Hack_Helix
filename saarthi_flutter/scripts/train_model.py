@@ -21,10 +21,10 @@ data = [
     
     # High Severity (2)
     ("There is a fire in the kitchen", 2),
-    ("My dad is having chest pains and sweating", 2),
     ("Someone is bleeding heavily from their head", 2),
     ("I see smoke coming from the building", 2),
     ("Major car accident, people are hurt", 2),
+    ("I think I broke my arm bone is showing", 2),
     
     # Critical Severity (3)
     ("My mother collapsed and is not breathing", 3),
@@ -32,6 +32,8 @@ data = [
     ("Active shooter in the building", 3),
     ("My friend got stabbed and is losing a lot of blood", 3),
     ("No pulse, heart stopped, need CPR", 3),
+    ("My dad is having chest pains and sweating, think it's a heart attack", 3),
+    ("Cardiac arrest, they are not breathing", 3),
 ]
 
 texts = [d[0] for d in data]

@@ -23,7 +23,7 @@ class HomeScreen extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.fromLTRB(r.horizontalPadding, r.vPad(20), r.horizontalPadding, r.vPad(12)),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Semantics(
                           header: true,
@@ -32,26 +32,8 @@ class HomeScreen extends StatelessWidget {
                               style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
                               children: [
                                 const TextSpan(text: 'Saar'),
-                                TextSpan(text: 'thi', style: TextStyle(color: Theme.of(context).primaryColor)),
+                                TextSpan(text: 'thi', style: const TextStyle(color: Colors.green)),
                               ],
-                            ),
-                          ),
-                        ),
-                        Semantics(
-                          button: true,
-                          label: 'Notifications',
-                          child: AnimatedPressCard(
-                            borderRadius: BorderRadius.circular(10),
-                            glowColor: const Color(0x18FFFFFF),
-                            pressScale: 0.92,
-                            child: Container(
-                              width: Responsive.minTouchTarget,
-                              height: Responsive.minTouchTarget,
-                              decoration: BoxDecoration(
-                                color: const Color(0xFF22222A),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: const Center(child: Text('🔔', style: TextStyle(fontSize: 15))),
                             ),
                           ),
                         ),
@@ -62,19 +44,27 @@ class HomeScreen extends StatelessWidget {
                   // ── Tagline ──
                   Padding(
                     padding: EdgeInsets.fromLTRB(r.horizontalPadding, 2, r.horizontalPadding, r.vPad(13)),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
                           'Stay safe,\nwe\'re here.',
+                          textAlign: TextAlign.center,
                           style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                             height: 1.25,
                             fontSize: 24 * r.fontScale,
                           ),
                         ),
                         const SizedBox(height: 4),
-                        Text('Tap an emergency or describe it below', style: Theme.of(context).textTheme.bodySmall),
+                        Text(
+                          'Tap an emergency or describe it below', 
+                          style: Theme.of(context).textTheme.bodySmall,
+                          textAlign: TextAlign.center,
+                        ),
                       ],
+                    ),
                     ),
                   ),
 

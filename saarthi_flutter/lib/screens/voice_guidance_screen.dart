@@ -68,7 +68,7 @@ class _VoiceGuidanceScreenState extends State<VoiceGuidanceScreen> with SingleTi
                           style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
                           children: [
                             const TextSpan(text: 'Saar'),
-                            TextSpan(text: 'thi', style: TextStyle(color: Theme.of(context).primaryColor)),
+                            TextSpan(text: 'thi', style: const TextStyle(color: Colors.green)),
                           ],
                         ),
                       ),
