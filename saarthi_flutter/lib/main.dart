@@ -4,11 +4,14 @@ import 'theme/app_theme.dart';
 import 'services/emergency_service.dart';
 import 'screens/home_screen.dart';
 
+import 'services/voice_service.dart';
+
 void main() {
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => EmergencyService()),
+        ChangeNotifierProvider(create: (_) => VoiceService()),
       ],
       child: const SaarthiApp(),
     ),

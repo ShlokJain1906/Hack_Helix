@@ -66,5 +66,9 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>We need speech recognition to detect emergency details hands-free.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>We need microphone access to record emergency descriptions.</string>
 </dict>
 </plist>

@@ -54,12 +54,19 @@ class EmergencyService extends ChangeNotifier {
     }
   }
 
-  void submitUserMessage(String text) async {
+  void submitUserMessage(String text, {bool isVoice = false}) async {
     if (text.isEmpty) return;
     addUserMessage(text);
     
     // Evaluate severity using the offline ML model
     currentSeverity = OfflineInference.analyzeSeverity(text);
+    
+    // Safety Requirement: If using voice input, keep severity at the highest order
+    if (isVoice) {
+      currentSeverity = 3;
+      if (kDebugMode) print('Severity forced to 3 because voice input was used.');
+    }
+
     if (kDebugMode) {
       print('--- Offline ML Prediction ---');
       print('Input: "$text"');

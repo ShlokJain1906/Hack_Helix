@@ -101,30 +101,58 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _buildSearchBox(BuildContext context) {
-    return Semantics(
-      button: true,
-      label: 'Describe your emergency using voice or text',
-      child: AnimatedPressCard(
-        borderRadius: BorderRadius.circular(15),
-        glowColor: const Color(0x10FFFFFF),
-        pressScale: 0.98,
-        onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ChatScreen(emergencyType: 'custom'))),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 13),
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surface,
-            border: Border.all(color: Colors.white12),
-            borderRadius: BorderRadius.circular(15),
-          ),
-          child: const Row(
-            children: [
-              Icon(Icons.mic_none, color: Colors.white54, size: 18),
-              SizedBox(width: 9),
-              Text('Describe your emergency...', style: TextStyle(color: Colors.white54, fontSize: 13)),
-            ],
+    return Row(
+      children: [
+        Expanded(
+          child: Semantics(
+            button: true,
+            label: 'Describe your emergency using text',
+            child: AnimatedPressCard(
+              borderRadius: BorderRadius.circular(15),
+              glowColor: const Color(0x10FFFFFF),
+              pressScale: 0.98,
+              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ChatScreen(emergencyType: 'custom'))),
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 13),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.surface,
+                  border: Border.all(color: Colors.white12),
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: const Row(
+                  children: [
+                    Icon(Icons.edit_note, color: Colors.white54, size: 18),
+                    SizedBox(width: 9),
+                    Text('Describe emergency...', style: TextStyle(color: Colors.white54, fontSize: 13)),
+                  ],
+                ),
+              ),
+            ),
           ),
         ),
-      ),
+        const SizedBox(width: 10),
+        Semantics(
+          button: true,
+          label: 'Describe your emergency using voice',
+          child: AnimatedPressCard(
+            borderRadius: BorderRadius.circular(15),
+            glowColor: const Color.fromRGBO(21, 101, 192, 0.4),
+            pressScale: 0.95,
+            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ChatScreen(emergencyType: 'custom', autoStartVoice: true))),
+            child: Container(
+              padding: const EdgeInsets.all(13),
+              decoration: BoxDecoration(
+                color: const Color(0xFF1565C0),
+                borderRadius: BorderRadius.circular(15),
+                boxShadow: [
+                   BoxShadow(color: const Color(0xFF1565C0).withOpacity(0.3), blurRadius: 10, spreadRadius: 0),
+                ],
+              ),
+              child: const Icon(Icons.mic, color: Colors.white, size: 22),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
